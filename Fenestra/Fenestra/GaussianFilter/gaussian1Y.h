@@ -14,6 +14,7 @@
 {
     CIImage   *inputImage;
     NSNumber  *inputSigma;
+    NSNumber  *inputRadius;
 }
 
 @end

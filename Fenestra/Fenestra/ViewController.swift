@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     }
     
     @objc func handleTap() {
-        let output = applyGaussianFilter(inputImage: image!, sigma: 10)
+        let output = applyGaussianFilter(inputImage: image!, sigma: 10) 
         image = CIImage.init(cgImage: output)
         print(image!.extent)
         
@@ -47,28 +47,6 @@ class ViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    func applyGaussianFilter(inputImage: CIImage, sigma: Int) -> CGImage {
-        let context = CIContext()
-        
-        // Gaussian Convolution
-        let gaussian1X = CIFilter(name: "gaussian1X")
-        gaussian1X?.setValue(inputImage, forKey: kCIInputImageKey)
-        gaussian1X?.setValue(sigma, forKey: "inputSigma")
-        let output1X = gaussian1X?.outputImage
-        
-        let gaussian1Y = CIFilter(name: "gaussian1Y")
-        gaussian1Y?.setValue(output1X, forKey: kCIInputImageKey)
-        gaussian1Y?.setValue(sigma, forKey: "inputSigma")
-        let convolvedImg = gaussian1Y?.outputImage
-        
-        // Downsample to N/2
-        let halve = CIFilter(name: "halve")
-        halve?.setValue(convolvedImg, forKey: kCIInputImageKey)
-        let output = halve?.outputImage
-        
-        return context.createCGImage(output!, from: (output!.extent))!
     }
 }
 
