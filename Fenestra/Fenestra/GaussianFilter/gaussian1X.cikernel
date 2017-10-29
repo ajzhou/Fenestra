@@ -3,16 +3,20 @@ const float M_PI = 3.1415926535897932384626433832795;
 return (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (x * x) / (2.0 * (sigma * sigma)));
 }
 
-kernel vec4 gaussian1X(sampler image,float sigma)
+kernel vec4 gaussian1X(sampler image,float sigma,float width,float origin)
 {
 const int radius = 30;
 vec4 s = vec4(0.0);
 vec2 dc = destCoord();
 
 for (int x=-radius; x<=radius; x++){
-vec2 offset = vec2(x,0);
 float g = gaussian1D(float(x),sigma);
-s += sample(image, samplerTransform(image, dc+offset)) * g;
+vec2 offset = vec2(x,0);
+vec2 tp = dc + offset;
+if (tp.x < origin || tp.x >= width+origin) {
+tp = dc - offset;
+}
+s += sample(image, samplerTransform(image, tp)) * g;
 }
 
 return s;

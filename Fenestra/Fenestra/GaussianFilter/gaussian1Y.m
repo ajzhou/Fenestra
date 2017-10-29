@@ -32,14 +32,17 @@ static CIKernel *gaussian1YKernel = nil;
 - (CIImage *)outputImage
 {
     CISampler * src = [CISampler samplerWithImage: inputImage];
-    //    CGRect DOD = CGRectInset(src.extent, 0, -30);
-    CGRect DOD = src.extent;
+    CGRect      DOD = src.extent;
+    NSNumber  * height = [NSNumber numberWithFloat:src.extent.size.height];
+    NSNumber  * origin = [NSNumber numberWithFloat:src.extent.origin.y];
     
     return [gaussian1YKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
         return CGRectInset(destRect, 0, -30);
     } arguments: @[
                    src,
-                   inputSigma]];
+                   inputSigma,
+                   height,
+                   origin]];
 }
 
 // registration

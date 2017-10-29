@@ -18,7 +18,6 @@ class ViewController: UIViewController {
         // initialize image
         image = CIImage(image: UIImage.init(named: "skydive")!)
         
-        
         // setup ImageView
         view.addSubview(imageView);
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: imageView)
