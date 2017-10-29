@@ -1,0 +1,9 @@
+kernel vec4 halveKernel(sampler src, vec2 offset)
+{
+vec2 dc = destCoord();
+vec2 coordinate = dc - offset;
+vec2 target = coordinate + coordinate + offset;
+
+vec4 s = sample(src, samplerTransform(src, target));
+return s;
+}

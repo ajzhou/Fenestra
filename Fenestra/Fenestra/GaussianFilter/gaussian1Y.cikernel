@@ -1,0 +1,19 @@
+float gaussian1D(float y, float sigma){
+const float M_PI = 3.1415926535897932384626433832795;
+return (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (y * y) / (2.0 * (sigma * sigma)));
+}
+
+kernel vec4 gaussian1Y(sampler image,float sigma)
+{
+const int radius = 30;
+vec4 s = vec4(0.0);
+vec2 dc = destCoord();
+
+for (int y=-radius; y<=radius; y++){
+vec2 offset = vec2(0,y);
+float g = gaussian1D(float(y),sigma);
+s += sample(image, samplerTransform(image, dc+offset)) * g;
+}
+
+return s;
+}
