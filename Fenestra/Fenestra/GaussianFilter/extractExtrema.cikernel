@@ -1,8 +1,8 @@
 int compare(vec4 pixel1, vec4 pixel2) {
 vec4 pix1 = premultiply(pixel1);
 vec4 pix2 = premultiply(pixel2);
-float val1 = 0.2989 * (pix1.r/255) + 0.5870 * (pix1.g/255) + 0.1140 * (pix1.b/255);
-float val2 = 0.2989 * (pix2.r/255) + 0.5870 * (pix2.g/255) + 0.1140 * (pix2.b/255);
+float val1 = 0.2989 * (pix1.r/255.0) + 0.5870 * (pix1.g/255.0) + 0.1140 * (pix1.b/255.0);
+float val2 = 0.2989 * (pix2.r/255.0) + 0.5870 * (pix2.g/255.0) + 0.1140 * (pix2.b/255.0);
 
 if (val1 < val2) {
 return -1;
@@ -44,7 +44,7 @@ vec4 comp3 = sample(src, samplerTransform(src, nc));
 int score = compare(pix,comp1) + compare(pix,comp2) + compare(pix,comp3);
 
 if (max == true) {
-if (offset == vec2(0,0)) {
+if (i == 0 && j == 0) {
 if (score != 2) {
 max = false;
 if (min == false) {
@@ -61,7 +61,7 @@ return vec4(0.0,0.0,0.0,1.0);
 }
 }
 if (min == true) {
-if (offset == vec2(0,0)) {
+if (i == 0 && j == 0) {
 if (score != -2) {
 min = false;
 if (max == false) {

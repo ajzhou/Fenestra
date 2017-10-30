@@ -95,7 +95,7 @@ extension ViewController {
         comp26?.setValue(diffGauss4, forKey: "inputComparison2")
         let extrema2 = comp26?.outputImage
         
-        return extrema1!
+        return diffGauss2
     }
 
 }
