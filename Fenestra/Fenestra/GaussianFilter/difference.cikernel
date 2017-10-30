@@ -1,0 +1,5 @@
+kernel vec4 difference(sampler imgLo,sampler imgHi)
+{
+vec2 dc = destCoord();
+return sample(imgHi, samplerTransform(imgHi, dc)) - sample(imgLo, samplerTransform(imgLo, dc));
+}

@@ -1,0 +1,90 @@
+int compare(vec4 pixel1, vec4 pixel2) {
+vec4 pix1 = premultiply(pixel1);
+vec4 pix2 = premultiply(pixel2);
+float val1 = 0.2989 * (pix1.r/255) + 0.5870 * (pix1.g/255) + 0.1140 * (pix1.b/255);
+float val2 = 0.2989 * (pix2.r/255) + 0.5870 * (pix2.g/255) + 0.1140 * (pix2.b/255);
+
+if (val1 < val2) {
+return -1;
+}
+if (val1 > val2) {
+return 1;
+}
+return 0;
+}
+
+
+
+kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2)
+{
+float ox = samplerExtent(src)[0];
+float oy = samplerExtent(src)[1];
+float width = samplerExtent(src)[2];
+float height = samplerExtent(src)[3];
+
+vec2 dc = destCoord();
+vec4 pix = sample(src, samplerTransform(src, dc));
+if (pix.a == 0.0) {
+return vec4(0.0,0.0,0.0,1.0);
+}
+
+bool max = true;
+bool min = true;
+for (int i=-1; i<=1; i++){
+for (int j=-1; i<=1; i++){
+vec2 offset = vec2(i,j);
+vec2 nc = dc + offset;
+if (nc.x<ox || nc.y<oy || nc.x >= width+ox || nc.y >=width+oy) {
+continue;
+}
+
+vec4 comp1 = sample(comparison1, samplerTransform(comparison1, nc));
+vec4 comp2 = sample(comparison2, samplerTransform(comparison2, nc));
+vec4 comp3 = sample(src, samplerTransform(src, nc));
+int score = compare(pix,comp1) + compare(pix,comp2) + compare(pix,comp3);
+
+if (max == true) {
+if (offset == vec2(0,0)) {
+if (score != 2) {
+max = false;
+if (min == false) {
+return vec4(0.0,0.0,0.0,1.0);
+}
+}
+} else {
+if (score != 3) {
+max = false;
+if (min == false) {
+return vec4(0.0,0.0,0.0,1.0);
+}
+}
+}
+}
+if (min == true) {
+if (offset == vec2(0,0)) {
+if (score != -2) {
+min = false;
+if (max == false) {
+return vec4(0.0,0.0,0.0,1.0);
+}
+}
+} else {
+if (score != -3) {
+min = false;
+if (max == false) {
+return vec4(0.0,0.0,0.0,1.0);
+}
+}
+}
+}
+
+}
+}
+
+if (max == true || min == true) {
+return vec4(0.0,0.0,0.0,0.0);
+} else {
+return vec4(0.0,0.0,0.0,1.0);
+}
+}
+

@@ -5,7 +5,7 @@ return (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (y * y) / (2.0 * (sigma * s
 
 kernel vec4 gaussian1Y(sampler image,float sigma,float height,float origin)
 {
-const int radius = 30;
+const int radius = int(sigma) * 3;
 vec4 s = vec4(0.0);
 vec2 dc = destCoord();
 
