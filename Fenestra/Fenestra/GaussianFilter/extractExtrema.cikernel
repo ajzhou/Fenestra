@@ -1,19 +1,34 @@
-int compare(vec4 pixel1, vec4 pixel2) {
-vec4 pix1 = premultiply(pixel1);
-vec4 pix2 = premultiply(pixel2);
-float val1 = 0.2989 * (pix1.r/255.0) + 0.5870 * (pix1.g/255.0) + 0.1140 * (pix1.b/255.0);
-float val2 = 0.2989 * (pix2.r/255.0) + 0.5870 * (pix2.g/255.0) + 0.1140 * (pix2.b/255.0);
-
-if (val1 < val2) {
-return -1;
+float intensity(vec4 pixel){
+vec4 pix = premultiply(pixel);
+return 0.2989 * (pix.r) + 0.5870 * (pix.g) + 0.1140 * (pix.b);
 }
-if (val1 > val2) {
+
+int compare2(vec4 src, vec4 comp1, vec4 comp2){
+float s  = intensity(src);
+float c1 = intensity(comp1);
+float c2 = intensity(comp2);
+if (s > c1 && s > c2){
 return 1;
+}
+if (s < c1 && s < c2){
+return -1;
 }
 return 0;
 }
 
-
+int compare3(vec4 src, vec4 comp1, vec4 comp2, vec4 comp3){
+float s  = intensity(src);
+float c1 = intensity(comp1);
+float c2 = intensity(comp2);
+float c3 = intensity(comp3);
+if (s > c1 && s > c2 && s > c3){
+return 1;
+}
+if (s < c1 && s < c2 && s < c3){
+return -1;
+}
+return 0;
+}
 
 kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2)
 {
@@ -34,57 +49,34 @@ for (int i=-1; i<=1; i++){
 for (int j=-1; i<=1; i++){
 vec2 offset = vec2(i,j);
 vec2 nc = dc + offset;
+// check out of bounds
 if (nc.x<ox || nc.y<oy || nc.x >= width+ox || nc.y >=width+oy) {
-continue;
+nc = dc - offset;  // currently reflecting back over border because cannot jump ahead
 }
 
 vec4 comp1 = sample(comparison1, samplerTransform(comparison1, nc));
 vec4 comp2 = sample(comparison2, samplerTransform(comparison2, nc));
 vec4 comp3 = sample(src, samplerTransform(src, nc));
-int score = compare(pix,comp1) + compare(pix,comp2) + compare(pix,comp3);
 
-if (max == true) {
-if (i == 0 && j == 0) {
-if (score != 2) {
-max = false;
-if (min == false) {
-return vec4(0.0,0.0,0.0,1.0);
-}
-}
+int res = 0;
+if (i==0 && j==0){
+res = compare2(pix,comp1,comp2);
 } else {
-if (score != 3) {
-max = false;
-if (min == false) {
-return vec4(0.0,0.0,0.0,1.0);
+res = compare3(pix,comp1,comp2,comp3);
 }
+
+if (res == 0) return vec4(0.0,0.0,0.0,1.0);
+if (res == 1) {
+if (min == true) min = false;
 }
+if (res == -1) {
+if (max == true) max = false;
 }
-}
-if (min == true) {
-if (i == 0 && j == 0) {
-if (score != -2) {
-min = false;
-if (max == false) {
-return vec4(0.0,0.0,0.0,1.0);
-}
-}
-} else {
-if (score != -3) {
-min = false;
-if (max == false) {
-return vec4(0.0,0.0,0.0,1.0);
-}
-}
+
+if (min == false && max == false) return vec4(0.0,0.0,0.0,1.0);
 }
 }
 
-}
-}
-
-if (max == true || min == true) {
 return vec4(0.0,0.0,0.0,0.0);
-} else {
-return vec4(0.0,0.0,0.0,1.0);
-}
 }
 

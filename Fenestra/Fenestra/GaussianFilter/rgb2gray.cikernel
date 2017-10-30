@@ -1,0 +1,9 @@
+kernel vec4 rgb2gray(sampler src) {
+vec2 dc = destCoord();
+vec4 pix = sample(src, samplerTransform(src, dc));
+pix = premultiply(pix);
+
+float intensity = 0.2989 * (pix.r) + 0.5870 * (pix.g) + 0.1140 * (pix.b);
+
+return vec4(0.0,0.0,0.0, intensity);
+}

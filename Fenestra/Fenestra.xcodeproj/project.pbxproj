@@ -25,6 +25,8 @@
 		6A268C381FA6809000481258 /* difference.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A268C371FA6809000481258 /* difference.cikernel */; };
 		6A268C3A1FA69C4500481258 /* extractExtrema.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A268C391FA69C4500481258 /* extractExtrema.m */; };
 		6A268C3D1FA69C6F00481258 /* extractExtrema.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A268C3C1FA69C6F00481258 /* extractExtrema.cikernel */; };
+		6A268C3F1FA7AC0D00481258 /* rgb2gray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A268C3E1FA7AC0D00481258 /* rgb2gray.m */; };
+		6A268C421FA7AC2600481258 /* rgb2gray.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A268C411FA7AC2600481258 /* rgb2gray.cikernel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,9 @@
 		6A268C391FA69C4500481258 /* extractExtrema.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = extractExtrema.m; sourceTree = "<group>"; };
 		6A268C3B1FA69C5200481258 /* extractExtrema.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = extractExtrema.h; sourceTree = "<group>"; };
 		6A268C3C1FA69C6F00481258 /* extractExtrema.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = extractExtrema.cikernel; sourceTree = "<group>"; };
+		6A268C3E1FA7AC0D00481258 /* rgb2gray.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rgb2gray.m; sourceTree = "<group>"; };
+		6A268C401FA7AC1900481258 /* rgb2gray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rgb2gray.h; sourceTree = "<group>"; };
+		6A268C411FA7AC2600481258 /* rgb2gray.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = rgb2gray.cikernel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +179,9 @@
 				6A268C391FA69C4500481258 /* extractExtrema.m */,
 				6A268C3B1FA69C5200481258 /* extractExtrema.h */,
 				6A268C3C1FA69C6F00481258 /* extractExtrema.cikernel */,
+				6A268C3E1FA7AC0D00481258 /* rgb2gray.m */,
+				6A268C401FA7AC1900481258 /* rgb2gray.h */,
+				6A268C411FA7AC2600481258 /* rgb2gray.cikernel */,
 			);
 			path = GaussianFilter;
 			sourceTree = "<group>";
@@ -287,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A268C381FA6809000481258 /* difference.cikernel in Resources */,
+				6A268C421FA7AC2600481258 /* rgb2gray.cikernel in Resources */,
 				6A268BFE1FA6474C00481258 /* LaunchScreen.storyboard in Resources */,
 				6A268C311FA6484900481258 /* halve.cikernel in Resources */,
 				6A268C3D1FA69C6F00481258 /* extractExtrema.cikernel in Resources */,
@@ -320,6 +329,7 @@
 			files = (
 				6A268C331FA658D500481258 /* VC+SIFT.swift in Sources */,
 				6A268C291FA647E500481258 /* gaussian1Y.m in Sources */,
+				6A268C3F1FA7AC0D00481258 /* rgb2gray.m in Sources */,
 				6A268BF61FA6474C00481258 /* ViewController.swift in Sources */,
 				6A268BF41FA6474C00481258 /* AppDelegate.swift in Sources */,
 				6A268C3A1FA69C4500481258 /* extractExtrema.m in Sources */,

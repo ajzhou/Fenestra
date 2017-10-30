@@ -37,25 +37,31 @@ class ViewController: UIViewController {
     }
     
     @objc func handleTap() {
-        // code to test gaussianBlur() ----------------------------------------
+        // code to test gaussianBlur() --------------------------------------------------------------------
 //        image = gaussianBlur(inputImage: image!, sigma: 30)
 //
 //
 //        // Display new image on imageView
 //        imageView.image = UIImage(ciImage: image!)
-        // code to test gaussianBlur() ----------------------------------------
+        // ------------------------------------------------------------------------------------------------
         
-        // code to test diffOfGaussian() ----------------------------------------
-//        let imageLo = gaussianBlur(inputImage: image!, sigma: 1.0)
-//        let imageHi = gaussianBlur(inputImage: image!, sigma: 30.0)
+        // code to test diffOfGaussian() ------------------------------------------------------------------
+//        let imageLo = gaussianBlur(inputImage: rgb2gray(inputImage: image!), sigma: 1.0)
+//        let imageHi = gaussianBlur(inputImage: rgb2gray(inputImage: image!), sigma: 1.4)
 //        let output = diffOfGaussian(inputImageLo: imageLo, inputImageHi: imageHi)
 //
 //        imageView.image = UIImage.init(ciImage: output)
-        // code to test diffOfGaussian() ----------------------------------------
+        // ------------------------------------------------------------------------------------------------
         
-        let output = detectExtrema(image: image!, sigma: 10.0)
+        // code to test extractExtrema() ------------------------------------------------------------------
+        let output = detectExtrema(inputImage: image!, sigma: 16.0)
         imageView.image = UIImage.init(ciImage: output)
+        // ------------------------------------------------------------------------------------------------
         
+        // code to test rgb2gray() ------------------------------------------------------------------------
+//        let output = rgb2gray(inputImage: image!)
+//        imageView.image = UIImage.init(ciImage: output)
+        // ------------------------------------------------------------------------------------------------
         print("whats up")
         
     }

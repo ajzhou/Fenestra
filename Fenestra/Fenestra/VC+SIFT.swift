@@ -11,6 +11,12 @@ import UIKit
 
 
 extension ViewController {
+    // grayscale images
+    func rgb2gray(inputImage: CIImage) -> CIImage {
+        let grayscale = CIFilter(name: "rgb2gray")
+        grayscale?.setValue(inputImage, forKey: kCIInputImageKey)
+        return (grayscale?.outputImage)!
+    }
     
     // Filter that gaussian blurs then downsample by 2
     // radius is the half-width of filter - default should be 3 * sigma 
@@ -66,7 +72,9 @@ extension ViewController {
     }
     
     // Detect local extrema in one octave
-    func detectExtrema(image: CIImage, sigma: Double)-> CIImage{
+    func detectExtrema(inputImage: CIImage, sigma: Double)-> CIImage{
+//        let image = rgb2gray(inputImage: inputImage)
+        let image = inputImage
         let k = 1.41421356237 // sqrt(2)
         
         // Stack of blurred images
@@ -95,7 +103,8 @@ extension ViewController {
         comp26?.setValue(diffGauss4, forKey: "inputComparison2")
         let extrema2 = comp26?.outputImage
         
-        return diffGauss2
+        return extrema1!
+        
     }
 
 }
