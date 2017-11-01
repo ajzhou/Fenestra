@@ -54,7 +54,7 @@ class ViewController: UIViewController {
         // ------------------------------------------------------------------------------------------------
         
         // code to test extractExtrema() ------------------------------------------------------------------
-        let output = detectExtrema(inputImage: image!, sigma: 0.5)
+        let output = detectExtrema(inputImage: image!, sigma: 1.6)
         imageView.image = UIImage.init(ciImage: output)
         // ------------------------------------------------------------------------------------------------
         

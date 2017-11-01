@@ -1,3 +1,4 @@
+// note that difference function subtracts only the aplha values; it is assuming r,g,b has zero entries
 kernel vec4 difference(sampler imgLo,sampler imgHi)
 {
 vec2 dc = destCoord();

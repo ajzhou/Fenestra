@@ -1,15 +1,18 @@
 // ExtractExtrema code for grayscale images
 kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2)
 {
+vec4 black = vec4(0.0,0.0,0.0,1.0);
+vec4 white = vec4(0.0,0.0,0.0,0.0);
+
 float ox = samplerExtent(src)[0];
 float oy = samplerExtent(src)[1];
 float width = samplerExtent(src)[2];
 float height = samplerExtent(src)[3];
 
 vec2 dc = destCoord();
-vec4 pix = sample(src, samplerTransform(src, dc));
-if (pix.a == 0.0) {
-return vec4(0.0,0.0,0.0,1.0);
+float pix = sample(src, samplerTransform(src, dc)).a;
+if (pix == 0.0) {
+return white;
 }
 
 bool max = true;
@@ -24,40 +27,40 @@ if (nc.x<ox || nc.y<oy || nc.x >= width+ox || nc.y >=width+oy) {
 nc = dc - offset;  // currently reflecting back over border because cannot jump ahead
 }
 
-vec4 comp1 = sample(comparison1, samplerTransform(comparison1, nc));
-vec4 comp2 = sample(comparison2, samplerTransform(comparison2, nc));
-vec4 comp3 = sample(src, samplerTransform(src, nc));
+float comp1 = sample(comparison1, samplerTransform(comparison1, nc)).a;
+float comp2 = sample(comparison2, samplerTransform(comparison2, nc)).a;
+float comp3 = sample(src, samplerTransform(src, nc)).a;
 
 if (max == true) {
 if (i == 0 && j == 0) {
-if (comp1.a > pix.a || comp2.a > pix.a) {
+if (comp1 > pix || comp2 > pix) {
 max = false;
 if (min == false) {
-return vec4(0.0,0.0,0.0,1.0);
+return white;
 }
 }
 } else {
-if (comp1.a > pix.a || comp2.a > pix.a || comp3.a > pix.a) {
+if (comp1 > pix || comp2 > pix || comp3 > pix) {
 max = false;
 if (min == false) {
-return vec4(0.0,0.0,0.0,1.0);
+return white;
 }
 }
 }
 }
 if (min == true) {
 if (i == 0 && j == 0) {
-if (comp1.a < pix.a || comp2.a < pix.a) {
+if (comp1 < pix || comp2 < pix) {
 min = false;
 if (max == false) {
-return vec4(0.0,0.0,0.0,1.0);
+return white;
 }
 }
 } else {
-if (comp1.a < pix.a || comp2.a < pix.a || comp3.a < pix.a) {
+if (comp1 < pix || comp2 < pix || comp3 < pix) {
 min = false;
 if (max == false) {
-return vec4(0.0,0.0,0.0,1.0);
+return white;
 }
 }
 }
@@ -66,5 +69,5 @@ return vec4(0.0,0.0,0.0,1.0);
 }
 }
 
-return vec4(0.0,0.0,0.0,0.0);
+return black;
 }

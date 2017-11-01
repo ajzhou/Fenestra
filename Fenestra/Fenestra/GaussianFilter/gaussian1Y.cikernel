@@ -6,7 +6,7 @@ return (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (y * y) / (2.0 * (sigma * s
 kernel vec4 gaussian1Y(sampler image,float sigma,float height,float origin)
 {
 const int radius = int(sigma) * 3;
-float s = 0.0;
+vec4 s = vec4(0.0);
 vec2 dc = destCoord();
 
 for (int y=-radius; y<=radius; y++){
@@ -19,5 +19,5 @@ tp = dc - offset;
 s += sample(image, samplerTransform(image, tp)).a * g;
 }
 
-return vec4(0.0,0.0,0.0,s);
+return s;
 }
