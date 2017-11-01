@@ -1,5 +1,8 @@
 kernel vec4 difference(sampler imgLo,sampler imgHi)
 {
 vec2 dc = destCoord();
-return sample(imgHi, samplerTransform(imgHi, dc)) - sample(imgLo, samplerTransform(imgLo, dc));
+float h = sample(imgHi, samplerTransform(imgHi, dc)).a;
+float l = sample(imgLo, samplerTransform(imgLo, dc)).a;
+
+return vec4(0.0, 0.0, 0.0, h-l);
 }

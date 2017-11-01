@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "grafitti")!)
+        image = CIImage(image: UIImage.init(named: "skydive")!)
         
         // setup ImageView
         view.addSubview(imageView);

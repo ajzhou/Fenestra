@@ -73,8 +73,8 @@ extension ViewController {
     
     // Detect local extrema in one octave
     func detectExtrema(inputImage: CIImage, sigma: Double)-> CIImage{
-//        let image = rgb2gray(inputImage: inputImage)
-        let image = inputImage
+        let image = rgb2gray(inputImage: inputImage)
+//        let image = inputImage
         let k = 1.41421356237 // sqrt(2)
         
         // Stack of blurred images
