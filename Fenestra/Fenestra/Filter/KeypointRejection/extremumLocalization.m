@@ -30,6 +30,7 @@ static CIKernel *extremumLocalizationKernel = nil;
 
 - (CIImage *)outputImage
 {
+    CISampler * map = [CISampler samplerWithImage: inputMap];
     CISampler * src = [CISampler samplerWithImage: inputImage];
     CISampler * hiImg = [CISampler samplerWithImage: inputHigherScaleImage];
     CISampler * loImg = [CISampler samplerWithImage: inputLowerScaleImage];
@@ -37,7 +38,7 @@ static CIKernel *extremumLocalizationKernel = nil;
     
     return [extremumLocalizationKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
         return CGRectInset(destRect, -3 * [inputSigma floatValue], -3 * [inputSigma floatValue]);
-    } arguments: @[src, hiImg, LoImg, inputSigma]];
+    } arguments: @[map, src, hiImg, loImg, inputSigma]];
 }
 
 // registration

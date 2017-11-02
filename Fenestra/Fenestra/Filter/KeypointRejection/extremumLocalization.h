@@ -12,6 +12,7 @@
 
 @interface extremumLocalization: CIFilter
 {
+    CIImage   *inputMap;
     CIImage   *inputImage;
     CIImage   *inputLowerScaleImage;
     CIImage   *inputHigherScaleImage; 
