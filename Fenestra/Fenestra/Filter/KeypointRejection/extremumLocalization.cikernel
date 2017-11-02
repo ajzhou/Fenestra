@@ -1,0 +1,35 @@
+vec3 calculate1stDerivative(vec2 dc, sampler src, sampler hiImg, sampler loImg)
+{
+vec4 extent = samplerExtent(src);
+
+// find dx
+float xLo = dc.x - 1;
+if (xLo < extent[0]) xLo = dc.x;
+float xHi = dc.x + 1;
+if (xHi > extent[2]) xHi = dc.x;
+float dx = sample(src, samplerTransform(src, vec2(xHi,dc.y))).a - sample(src, samplerTransform(src, vec2(xLo,dc.y))).a;
+
+
+// find dy
+float yLo = dc.y - 1;
+if (yLo < extent[1]) yLo = yLo = dc.y;
+float yHi = dc.y + 1;
+if (yHi > extent[3]) yHi = dc.y;
+float dy = sample(src, samplerTransform(src, vec2(dc.x,yHi))).a - sample(src, samplerTransform(src, vec2(dc.x,yLo))).a;
+
+// find ds
+float ds = sample(hiImg, samplerTransform(hiImg, dc)).a - sample(loImg, samplerTransform(loImg, dc)).a;
+
+return vec3(dx,dy,ds);
+}
+
+
+kernel vec4 extremumLocalization(sampler src, sampler hiImg, sampler loImg, float sigma)
+{
+const float radius = round(3 * sigma);
+
+sample(src, samplerTransform(src, vec2(xHi,dc.y)))
+
+
+}
+

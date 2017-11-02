@@ -1,8 +1,8 @@
 // ExtractExtrema code for grayscale images
-kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2)
+kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2, float sigma)
 {
-vec4 black = vec4(0.0,0.0,0.0,1.0);
-vec4 white = vec4(0.0,0.0,0.0,0.0);
+vec4 black = vec4(0.0,0.0,sigma,1.0);
+vec4 white = vec4(0.0,0.0,sigma,0.0);
 
 float ox = samplerExtent(src)[0];
 float oy = samplerExtent(src)[1];

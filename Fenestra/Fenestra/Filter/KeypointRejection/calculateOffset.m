@@ -1,52 +1,55 @@
 //
-//  extractExtrema.m
+//  calculateOffset.m
 //  Fenestra
 //
-//  Created by Andrew Jay Zhou on 10/29/17.
+//  Created by Andrew Jay Zhou on 11/1/17.
 //  Copyright © 2017 Andrew Jay Zhou. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "extractExtrema.h"
+#import "calculateOffset.h"
 
-@implementation extractExtrema
+@implementation calculateOffset
 
-static CIKernel *extractExtremaKernel = nil;
+static CIKernel *calculateOffsetKernel = nil;
 
 - (id)init {
-    if(extractExtremaKernel == nil)
+    if(calculateOffsetKernel == nil)
     {
         NSBundle    *bundle = [NSBundle bundleForClass: [self class]];
         
-        NSString *fullPath = [[NSBundle mainBundle] pathForResource:@"extractExtrema"
+        NSString *fullPath = [[NSBundle mainBundle] pathForResource:@"calculateOffset"
                                                              ofType:@"cikernel"];
         NSString    *code = [NSString stringWithContentsOfFile:fullPath encoding: NSASCIIStringEncoding error: NULL];
         
         NSArray     *kernels = [CIKernel kernelsWithString: code];
-        extractExtremaKernel = kernels[0];
+        calculateOffsetKernel = kernels[0];
     }
     return [super init];
 }
 
 - (CIImage *)outputImage
 {
+    CISampler * map = [CISampler samplerWithImage: inputMap];
     CISampler * src = [CISampler samplerWithImage: inputImage];
-    CISampler * comparison1 = [CISampler samplerWithImage: inputComparison1];
-    CISampler * comparison2 = [CISampler samplerWithImage: inputComparison2];
+    CISampler * hiImg = [CISampler samplerWithImage: inputHigherScaleImage];
+    CISampler * hiHiImg = [CISampler samplerWithImage: inputHigherHigherScaleImage];
+    CISampler * loImg = [CISampler samplerWithImage: inputLowerScaleImage];
+    CISampler * loLoImg = [CISampler samplerWithImage: inputLowerLowerScaleImage];
     CGRect DOD = src.extent;
     
-    return [extractExtremaKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
+    return [calculateOffsetKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
         return CGRectInset(destRect, -1, -1);
-    } arguments: @[src, comparison1, comparison2]];
+    } arguments: @[map,src,hiImg,hiHiImg,loImg,loLoImg]];
 }
 
 // registration
 + (void)initialize
 {
-    [CIFilter registerFilterName: @"Extract Extrema"
+    [CIFilter registerFilterName: @"Calculate Offset"
                      constructor: self
                  classAttributes:
-     @{kCIAttributeFilterDisplayName : @"Extract Extrema Filter",
+     @{kCIAttributeFilterDisplayName : @"Calculate Offset Filter",
        kCIAttributeFilterCategories : @[
                kCICategoryColorAdjustment, kCICategoryVideo,
                kCICategoryStillImage, kCICategoryInterlaced,

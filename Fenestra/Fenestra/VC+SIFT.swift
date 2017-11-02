@@ -18,6 +18,13 @@ extension ViewController {
         return (grayscale?.outputImage)!
     }
     
+    // downsample by factor of 2
+    func downSampleBy2(inputImage: CIImage) -> CIImage {
+        let halve = CIFilter(name: "halve")
+        halve?.setValue(inputImage, forKey: kCIInputImageKey)
+        return (halve?.outputImage)!
+    }
+    
     // Filter that gaussian blurs then downsample by 2
     // radius is the half-width of filter - default should be 3 * sigma 
     func applyGaussianFilter(inputImage: CIImage, sigma: Int) -> CGImage {
@@ -96,15 +103,16 @@ extension ViewController {
         comp26?.setValue(diffGauss2, forKey: "inputImage")
         comp26?.setValue(diffGauss1, forKey: "inputComparison1")
         comp26?.setValue(diffGauss3, forKey: "inputComparison2")
+        comp26?.setValue(sigma * k, forKey: "inputSigma")
         let extrema1 = comp26?.outputImage
         // Next compare diffGauss2,3,4 | with diffGauss3 in the middle of stack
         comp26?.setValue(diffGauss3, forKey: "inputImage")
         comp26?.setValue(diffGauss2, forKey: "inputComparison1")
         comp26?.setValue(diffGauss4, forKey: "inputComparison2")
+        comp26?.setValue(sigma * k * k * k, forKey: "inputSigma")
         let extrema2 = comp26?.outputImage
         
         return extrema1!
-        
     }
 
 }

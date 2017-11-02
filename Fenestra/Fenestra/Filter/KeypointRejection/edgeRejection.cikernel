@@ -1,0 +1,6 @@
+kernel vec4 edgeRejection(sampler src, sampler comparison1, sampler comparison2, float sigma)
+{
+
+
+}
+

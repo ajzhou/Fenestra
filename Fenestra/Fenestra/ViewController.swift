@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "skydive")!)
+        image = CIImage(image: UIImage.init(named: "butterfly")!)
         
         // setup ImageView
         view.addSubview(imageView);
@@ -54,7 +54,9 @@ class ViewController: UIViewController {
         // ------------------------------------------------------------------------------------------------
         
         // code to test extractExtrema() ------------------------------------------------------------------
-        let output = detectExtrema(inputImage: image!, sigma: 1.6)
+//        image = downSampleBy2(inputImage: image!)
+//        image = downSampleBy2(inputImage: image!)
+        let output = detectExtrema(inputImage: image!, sigma: 1.0)
         imageView.image = UIImage.init(ciImage: output)
         // ------------------------------------------------------------------------------------------------
         

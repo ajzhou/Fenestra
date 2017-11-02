@@ -1,0 +1,6 @@
+kernel vec4 lowConstrastRejection(sampler src, sampler comparison1, sampler comparison2, float sigma)
+{
+
+
+}
+

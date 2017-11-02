@@ -1,0 +1,94 @@
+vec3 calculate1stDerivative(vec2 dc, sampler src, sampler hiImg, sampler loImg)
+{
+vec4 extent = samplerExtent(src);
+
+// find dx
+float xLo = dc.x - 1;
+if (xLo < extent[0]) xLo = dc.x;
+float xHi = dc.x + 1;
+if (xHi > extent[2]) xHi = dc.x;
+float dx = sample(src, samplerTransform(src, vec2(xHi,dc.y))).a - sample(src, samplerTransform(src, vec2(xLo,dc.y))).a;
+
+
+// find dy
+float yLo = dc.y - 1;
+if (yLo < extent[1]) yLo = yLo = dc.y;
+float yHi = dc.y + 1;
+if (yHi > extent[3]) yHi = dc.y;
+float dy = sample(src, samplerTransform(src, vec2(dc.x,yHi))).a - sample(src, samplerTransform(src, vec2(dc.x,yLo))).a;
+
+// find ds
+float ds = sample(hiImg, samplerTransform(hiImg, dc)).a - sample(loImg, samplerTransform(loImg, dc)).a;
+
+return vec3(dx,dy,ds);
+}
+
+
+kernel vec4 calculateOffset(sampler map, sampler src, sampler hiImg, sampler hiHiImg, sampler loImg, sampler loLoImg)
+{
+vec2 dc = destCoord();
+vec4 checkPoint = sample(map, samplerTransform(map, dc));
+if (checkPoint.a == 0.0) return vec4(0.0);
+
+// MARK:- first derivative at dc
+vec3 d = calculate1stDerivative(dc, src, hiImg, loImg);
+
+// MARK:- find inverse of second derivative
+// find second derivative
+// find ddx
+vec3 dxLo = calculate1stDerivative(vec2(dc.x-1,dc.y), src, hiImg, loImg);
+vec3 dxHi = calculate1stDerivative(vec2(dc.x+1,dc.y), src, hiImg, loImg);
+vec3 ddx  = dxHi - dxLo;
+// find ddy
+vec3 dyLo = calculate1stDerivative(vec2(dc.x,dc.y-1), src, hiImg, loImg);
+vec3 dyHi = calculate1stDerivative(vec2(dc.x,dc.y+1), src, hiImg, loImg);
+vec3 ddy  = dyHi - dyLo;
+// find dds
+vec3 dsLo = calculate1stDerivative(dc, loImg, src, loLoImg);
+vec3 dsHi = calculate1stDerivative(dc, hiImg, hiHiImg, src);
+vec3 dds  = dsHi - dsLo;
+
+// find 1/det
+float det = (ddx[0] * ddy[1] * dds[2]) + (ddy[0] + dds[1] + ddx[2]) + (dds[0] + ddx[1] + ddy[2]) - (ddy[0] * ddx[1] * dds[2]) - (ddx[0] * dds[1] * ddy[2]) - (dds[0] * ddy[1] * ddx[2]);
+float detInv = 1/det;
+
+// find transpose of cofactor matrix
+// first row
+float ct00 = ddy[1] * dds[2] - dds[1] * ddy[2];
+float ct01 = ddy[0] * dds[2] - dds[0] * ddy[2];
+float ct02 = ddy[0] * dds[1] - dds[0] * ddy[1];
+vec3  ctR0 = vec3(ct00,ct01,ct02);
+// second row
+float ct10 = ddx[1] * dds[2] - dds[1] * ddx[2];
+float ct11 = ddx[0] * dds[2] - dds[0] * dds[2];
+float ct12 = ddx[0] * dds[1] - dds[0] * ddx[1];
+vec3  ctR1 = vec3(ct10,ct11,ct12);
+// third row
+float ct20 = ddx[1] * ddy[2] - ddy[1] * ddx[2];
+float ct21 = ddx[0] * ddy[2] - ddy[0] * ddx[2];
+float ct22 = ddx[0] * ddy[1] - ddy[0] * ddx[1];
+vec3  ctR2 = vec3(ct20,ct21,ct22);
+
+// Inverse of second derivative matrix = 1/det * transepose of cofactor matrix
+vec3 ddInvR0 = detInv * ctR0;
+vec3 ddInvR1 = detInv * ctR1;
+vec3 ddInvR2 = detInv * ctR2;
+
+// MARK:- find offset -->
+vec3 offset = vec3(-1.0 * dot(ddInvR0,d), -1.0 * dot(ddInvR1,d), -1.0 * dot(ddInvR2,d));
+
+// MARK:- localize keypoint. If any component of offset is greater than 0.5, record offset.
+if (offset[0] > 0.5 || offset[1] > 0.5 || offset[2] > 0.5) {
+float newX = dc.x + round(offset[0]);
+float newY = dc.y + round(offset[1]);
+float newS = checkPoint[2] + round(offset[2]);
+return vec4(newX, newY, newS, 0.5);
+} else {
+return vec4(0.0, 0.0, checkPoint[2], 1.0); // sample point is keypoint
+}
+}
+
+
+
+
+

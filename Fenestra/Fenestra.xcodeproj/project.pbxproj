@@ -27,6 +27,14 @@
 		6A268C3D1FA69C6F00481258 /* extractExtrema.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A268C3C1FA69C6F00481258 /* extractExtrema.cikernel */; };
 		6A268C3F1FA7AC0D00481258 /* rgb2gray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A268C3E1FA7AC0D00481258 /* rgb2gray.m */; };
 		6A268C421FA7AC2600481258 /* rgb2gray.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A268C411FA7AC2600481258 /* rgb2gray.cikernel */; };
+		6A4F8EBF1FAAB82F00FEC879 /* calculateOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F8EBE1FAAB82F00FEC879 /* calculateOffset.m */; };
+		6A4F8EC21FAAB84C00FEC879 /* calculateOffset.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC11FAAB84C00FEC879 /* calculateOffset.cikernel */; };
+		6A4F8EC41FAAB88600FEC879 /* extremumLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC31FAAB88600FEC879 /* extremumLocalization.m */; };
+		6A4F8EC71FAAB8A900FEC879 /* extremumLocalization.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC61FAAB8A900FEC879 /* extremumLocalization.cikernel */; };
+		6A4F8EC91FAAB8CC00FEC879 /* lowConstrastRejection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC81FAAB8CC00FEC879 /* lowConstrastRejection.m */; };
+		6A4F8ECC1FAAB8E200FEC879 /* lowConstrastRejection.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8ECB1FAAB8E200FEC879 /* lowConstrastRejection.cikernel */; };
+		6A4F8ECE1FAABA1B00FEC879 /* edgeRejection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */; };
+		6A4F8ED11FAABA2F00FEC879 /* edgeRejection.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +88,18 @@
 		6A268C3E1FA7AC0D00481258 /* rgb2gray.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rgb2gray.m; sourceTree = "<group>"; };
 		6A268C401FA7AC1900481258 /* rgb2gray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rgb2gray.h; sourceTree = "<group>"; };
 		6A268C411FA7AC2600481258 /* rgb2gray.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = rgb2gray.cikernel; sourceTree = "<group>"; };
+		6A4F8EBE1FAAB82F00FEC879 /* calculateOffset.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = calculateOffset.m; sourceTree = "<group>"; };
+		6A4F8EC01FAAB83C00FEC879 /* calculateOffset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = calculateOffset.h; sourceTree = "<group>"; };
+		6A4F8EC11FAAB84C00FEC879 /* calculateOffset.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = calculateOffset.cikernel; sourceTree = "<group>"; };
+		6A4F8EC31FAAB88600FEC879 /* extremumLocalization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = extremumLocalization.m; sourceTree = "<group>"; };
+		6A4F8EC51FAAB89900FEC879 /* extremumLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = extremumLocalization.h; sourceTree = "<group>"; };
+		6A4F8EC61FAAB8A900FEC879 /* extremumLocalization.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = extremumLocalization.cikernel; sourceTree = "<group>"; };
+		6A4F8EC81FAAB8CC00FEC879 /* lowConstrastRejection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lowConstrastRejection.m; sourceTree = "<group>"; };
+		6A4F8ECA1FAAB8D400FEC879 /* lowConstrastRejection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lowConstrastRejection.h; sourceTree = "<group>"; };
+		6A4F8ECB1FAAB8E200FEC879 /* lowConstrastRejection.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = lowConstrastRejection.cikernel; sourceTree = "<group>"; };
+		6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = edgeRejection.m; sourceTree = "<group>"; };
+		6A4F8ECF1FAABA2500FEC879 /* edgeRejection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = edgeRejection.h; sourceTree = "<group>"; };
+		6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = edgeRejection.cikernel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +150,7 @@
 		6A268BF21FA6474C00481258 /* Fenestra */ = {
 			isa = PBXGroup;
 			children = (
-				6A268C241FA6478D00481258 /* GaussianFilter */,
+				6A268C241FA6478D00481258 /* Filter */,
 				6A268BF31FA6474C00481258 /* AppDelegate.swift */,
 				6A268BF51FA6474C00481258 /* ViewController.swift */,
 				6A268C321FA658D500481258 /* VC+SIFT.swift */,
@@ -161,9 +181,40 @@
 			path = FenestraUITests;
 			sourceTree = "<group>";
 		};
-		6A268C241FA6478D00481258 /* GaussianFilter */ = {
+		6A268C241FA6478D00481258 /* Filter */ = {
 			isa = PBXGroup;
 			children = (
+				6A4F8EBD1FAAB60C00FEC879 /* KeypointCandidateSelection */,
+				6A4F8EBC1FAAB57E00FEC879 /* KeypointRejection */,
+			);
+			path = Filter;
+			sourceTree = "<group>";
+		};
+		6A4F8EBC1FAAB57E00FEC879 /* KeypointRejection */ = {
+			isa = PBXGroup;
+			children = (
+				6A4F8EBE1FAAB82F00FEC879 /* calculateOffset.m */,
+				6A4F8EC01FAAB83C00FEC879 /* calculateOffset.h */,
+				6A4F8EC11FAAB84C00FEC879 /* calculateOffset.cikernel */,
+				6A4F8EC31FAAB88600FEC879 /* extremumLocalization.m */,
+				6A4F8EC51FAAB89900FEC879 /* extremumLocalization.h */,
+				6A4F8EC61FAAB8A900FEC879 /* extremumLocalization.cikernel */,
+				6A4F8EC81FAAB8CC00FEC879 /* lowConstrastRejection.m */,
+				6A4F8ECA1FAAB8D400FEC879 /* lowConstrastRejection.h */,
+				6A4F8ECB1FAAB8E200FEC879 /* lowConstrastRejection.cikernel */,
+				6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */,
+				6A4F8ECF1FAABA2500FEC879 /* edgeRejection.h */,
+				6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */,
+			);
+			path = KeypointRejection;
+			sourceTree = "<group>";
+		};
+		6A4F8EBD1FAAB60C00FEC879 /* KeypointCandidateSelection */ = {
+			isa = PBXGroup;
+			children = (
+				6A268C3E1FA7AC0D00481258 /* rgb2gray.m */,
+				6A268C401FA7AC1900481258 /* rgb2gray.h */,
+				6A268C411FA7AC2600481258 /* rgb2gray.cikernel */,
 				6A268C221FA6477C00481258 /* gaussian1X.m */,
 				6A268C251FA647BD00481258 /* gaussian1X.h */,
 				6A268C261FA647CC00481258 /* gaussian1X.cikernel */,
@@ -179,11 +230,8 @@
 				6A268C391FA69C4500481258 /* extractExtrema.m */,
 				6A268C3B1FA69C5200481258 /* extractExtrema.h */,
 				6A268C3C1FA69C6F00481258 /* extractExtrema.cikernel */,
-				6A268C3E1FA7AC0D00481258 /* rgb2gray.m */,
-				6A268C401FA7AC1900481258 /* rgb2gray.h */,
-				6A268C411FA7AC2600481258 /* rgb2gray.cikernel */,
 			);
-			path = GaussianFilter;
+			path = KeypointCandidateSelection;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,15 +342,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A4F8EC21FAAB84C00FEC879 /* calculateOffset.cikernel in Resources */,
 				6A268C381FA6809000481258 /* difference.cikernel in Resources */,
 				6A268C421FA7AC2600481258 /* rgb2gray.cikernel in Resources */,
 				6A268BFE1FA6474C00481258 /* LaunchScreen.storyboard in Resources */,
 				6A268C311FA6484900481258 /* halve.cikernel in Resources */,
+				6A4F8EC71FAAB8A900FEC879 /* extremumLocalization.cikernel in Resources */,
+				6A4F8ED11FAABA2F00FEC879 /* edgeRejection.cikernel in Resources */,
 				6A268C3D1FA69C6F00481258 /* extractExtrema.cikernel in Resources */,
 				6A268BFB1FA6474C00481258 /* Assets.xcassets in Resources */,
 				6A268C271FA647CC00481258 /* gaussian1X.cikernel in Resources */,
 				6A268C2C1FA6480800481258 /* gaussian1Y.cikernel in Resources */,
 				6A268BF91FA6474C00481258 /* Main.storyboard in Resources */,
+				6A4F8ECC1FAAB8E200FEC879 /* lowConstrastRejection.cikernel in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,13 +379,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A4F8ECE1FAABA1B00FEC879 /* edgeRejection.m in Sources */,
 				6A268C331FA658D500481258 /* VC+SIFT.swift in Sources */,
 				6A268C291FA647E500481258 /* gaussian1Y.m in Sources */,
 				6A268C3F1FA7AC0D00481258 /* rgb2gray.m in Sources */,
+				6A4F8EC41FAAB88600FEC879 /* extremumLocalization.m in Sources */,
 				6A268BF61FA6474C00481258 /* ViewController.swift in Sources */,
 				6A268BF41FA6474C00481258 /* AppDelegate.swift in Sources */,
 				6A268C3A1FA69C4500481258 /* extractExtrema.m in Sources */,
 				6A268C2E1FA6482400481258 /* halve.m in Sources */,
+				6A4F8EC91FAAB8CC00FEC879 /* lowConstrastRejection.m in Sources */,
+				6A4F8EBF1FAAB82F00FEC879 /* calculateOffset.m in Sources */,
 				6A268C351FA6807B00481258 /* difference.m in Sources */,
 				6A268C231FA6477C00481258 /* gaussian1X.m in Sources */,
 			);
