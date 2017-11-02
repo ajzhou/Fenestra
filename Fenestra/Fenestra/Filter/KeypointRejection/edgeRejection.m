@@ -30,14 +30,13 @@ static CIKernel *edgeRejectionKernel = nil;
 
 - (CIImage *)outputImage
 {
+    CISampler * map = [CISampler samplerWithImage: inputMap];
     CISampler * src = [CISampler samplerWithImage: inputImage];
-    CISampler * comparison1 = [CISampler samplerWithImage: inputComparison1];
-    CISampler * comparison2 = [CISampler samplerWithImage: inputComparison2];
     CGRect DOD = src.extent;
     
     return [edgeRejectionKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
-        return CGRectInset(destRect, -1, -1);
-    } arguments: @[src, comparison1, comparison2, inputSigma]];
+        return CGRectInset(destRect, -2, -2);
+    } arguments: @[map, src, inputThreshold]];
 }
 
 // registration
