@@ -31,8 +31,6 @@
 		6A4F8EC21FAAB84C00FEC879 /* calculateOffset.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC11FAAB84C00FEC879 /* calculateOffset.cikernel */; };
 		6A4F8EC41FAAB88600FEC879 /* extremumLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC31FAAB88600FEC879 /* extremumLocalization.m */; };
 		6A4F8EC71FAAB8A900FEC879 /* extremumLocalization.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC61FAAB8A900FEC879 /* extremumLocalization.cikernel */; };
-		6A4F8EC91FAAB8CC00FEC879 /* lowConstrastRejection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F8EC81FAAB8CC00FEC879 /* lowConstrastRejection.m */; };
-		6A4F8ECC1FAAB8E200FEC879 /* lowConstrastRejection.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8ECB1FAAB8E200FEC879 /* lowConstrastRejection.cikernel */; };
 		6A4F8ECE1FAABA1B00FEC879 /* edgeRejection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */; };
 		6A4F8ED11FAABA2F00FEC879 /* edgeRejection.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */; };
 /* End PBXBuildFile section */
@@ -94,9 +92,6 @@
 		6A4F8EC31FAAB88600FEC879 /* extremumLocalization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = extremumLocalization.m; sourceTree = "<group>"; };
 		6A4F8EC51FAAB89900FEC879 /* extremumLocalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = extremumLocalization.h; sourceTree = "<group>"; };
 		6A4F8EC61FAAB8A900FEC879 /* extremumLocalization.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = extremumLocalization.cikernel; sourceTree = "<group>"; };
-		6A4F8EC81FAAB8CC00FEC879 /* lowConstrastRejection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lowConstrastRejection.m; sourceTree = "<group>"; };
-		6A4F8ECA1FAAB8D400FEC879 /* lowConstrastRejection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lowConstrastRejection.h; sourceTree = "<group>"; };
-		6A4F8ECB1FAAB8E200FEC879 /* lowConstrastRejection.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = lowConstrastRejection.cikernel; sourceTree = "<group>"; };
 		6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = edgeRejection.m; sourceTree = "<group>"; };
 		6A4F8ECF1FAABA2500FEC879 /* edgeRejection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = edgeRejection.h; sourceTree = "<group>"; };
 		6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = edgeRejection.cikernel; sourceTree = "<group>"; };
@@ -199,9 +194,6 @@
 				6A4F8EC31FAAB88600FEC879 /* extremumLocalization.m */,
 				6A4F8EC51FAAB89900FEC879 /* extremumLocalization.h */,
 				6A4F8EC61FAAB8A900FEC879 /* extremumLocalization.cikernel */,
-				6A4F8EC81FAAB8CC00FEC879 /* lowConstrastRejection.m */,
-				6A4F8ECA1FAAB8D400FEC879 /* lowConstrastRejection.h */,
-				6A4F8ECB1FAAB8E200FEC879 /* lowConstrastRejection.cikernel */,
 				6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */,
 				6A4F8ECF1FAABA2500FEC879 /* edgeRejection.h */,
 				6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */,
@@ -354,7 +346,6 @@
 				6A268C271FA647CC00481258 /* gaussian1X.cikernel in Resources */,
 				6A268C2C1FA6480800481258 /* gaussian1Y.cikernel in Resources */,
 				6A268BF91FA6474C00481258 /* Main.storyboard in Resources */,
-				6A4F8ECC1FAAB8E200FEC879 /* lowConstrastRejection.cikernel in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,7 +379,6 @@
 				6A268BF41FA6474C00481258 /* AppDelegate.swift in Sources */,
 				6A268C3A1FA69C4500481258 /* extractExtrema.m in Sources */,
 				6A268C2E1FA6482400481258 /* halve.m in Sources */,
-				6A4F8EC91FAAB8CC00FEC879 /* lowConstrastRejection.m in Sources */,
 				6A4F8EBF1FAAB82F00FEC879 /* calculateOffset.m in Sources */,
 				6A268C351FA6807B00481258 /* difference.m in Sources */,
 				6A268C231FA6477C00481258 /* gaussian1X.m in Sources */,

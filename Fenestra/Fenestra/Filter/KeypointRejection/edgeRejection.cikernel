@@ -1,9 +1,9 @@
 float dx(sampler src, vec2 dc) {
 vec4 extent = samplerExtent(src);
-float xLo = dc.x - 1;
+float xLo = dc.x - 1.0;
 if (xLo < extent[0]) xLo = dc.x;
-float xHi = dc.x + 1;
-if (xHi > (extent[0] + extent[2])) xHi = dc.x;
+float xHi = dc.x + 1.0;
+if (xHi >= (extent[0] + extent[2])) xHi = dc.x;
 
 return sample(src, samplerTransform(src, vec2(xHi, dc.y))).a - sample(src, samplerTransform(src, vec2(xLo, dc.y))).a;
 
@@ -11,15 +11,14 @@ return sample(src, samplerTransform(src, vec2(xHi, dc.y))).a - sample(src, sampl
 
 float dy(sampler src, vec2 dc) {
 vec4 extent = samplerExtent(src);
-float yLo = dc.y - 1;
+float yLo = dc.y - 1.0;
 if (yLo < extent[1]) yLo = dc.y;
-float yHi = dc.y + 1;
+float yHi = dc.y + 1.0;
 if (yHi >= (extent[1] + extent[3])) yHi = dc.y;
 
 return sample(src, samplerTransform(src, vec2(dc.x, yHi))).a - sample(src, samplerTransform(src, vec2(dc.x, yLo))).a;
 
 }
-
 
 kernel vec4 edgeRejection(sampler map, sampler src, float r)
 {
@@ -31,18 +30,17 @@ if (indicator.a == 0.0) return vec4(0.0);
 vec4 extent = samplerExtent(src);
 
 // find dxx
-float xLo = dc.x - 1;
+float xLo = dc.x - 1.0;
 if (xLo < extent[0]) xLo = dc.x;
-float xHi = dc.x + 1;
-if (xHi > (extent[0] + extent[2])) xHi = dc.x;
+float xHi = dc.x + 1.0;
+if (xHi >= (extent[0] + extent[2])) xHi = dc.x;
 
 float dxx = dx(src, vec2(xHi,dc.y)) - dx(src, vec2(xLo,dc.y));
 
-
 // find dyy
-float yLo = dc.y - 1;
+float yLo = dc.y - 1.0;
 if (yLo < extent[1]) yLo = dc.y;
-float yHi = dc.y + 1;
+float yHi = dc.y + 1.0;
 if (yHi >= (extent[1] + extent[3])) yHi = dc.y;
 
 float dyy = dy(src, vec2(dc.x, yHi)) - dy(src, vec2(dc.x, yLo));
@@ -57,7 +55,7 @@ float det = dxx * dyy - dxy * dxy;
 
 // check principal curvature ratio
 float ratio = trace * trace / det;
-float threshold = (r + 1) * (r + 1) / r;
+float threshold = (r + 1.0) * (r + 1.0) / r;
 if (ratio > threshold) return vec4(0.0);
 
 return indicator;

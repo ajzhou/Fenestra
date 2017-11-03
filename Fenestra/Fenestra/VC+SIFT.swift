@@ -138,16 +138,17 @@ extension ViewController {
         localizer?.setValue(src, forKey: "inputImage")
         localizer?.setValue(hiImg, forKey: "inputHigherScaleImage")
         localizer?.setValue(loImg, forKey: "inputLowerScaleImage")
-        localizer?.setValue(3.2, forKey: "inputSigma")  // sigma hard coded for now
+        localizer?.setValue(3.2, forKey: "inputSigma")  // sigma hard coded
+        let mapLocalized = (localizer?.outputImage)!
         
-//        CIImage   *inputMap;
-//        CIImage   *inputImage;
-//        CIImage   *inputLowerScaleImage;
-//        CIImage   *inputHigherScaleImage;
-//        NSNumber  *inputSigma; // determines window size 
+        // rid edges
+        let edger = CIFilter(name: "edgeRejection")
+        edger?.setValue(mapLocalized, forKey: "inputMap")
+        edger?.setValue(src, forKey: "inputImage")
+        edger?.setValue(10.0, forKey: "inputThreshold") // r value hard coded
         
         
-        return (localizer?.outputImage)!
+        return (edger?.outputImage)!
     }
 
 }
