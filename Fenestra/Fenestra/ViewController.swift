@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "skydive")!)
+        image = CIImage(image: UIImage.init(named: "butterfly")!)
 //        image = rgb2gray(inputImage: image!)
         
         // setup ImageView
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
         // ------------------------------------------------------------------------------------------------
         
         // code to test gaussianBlur() --------------------------------------------------------------------
-        image = gaussianBlur(inputImage: image!, sigma: 30)
+//        image = gaussianBlur(inputImage: image!, sigma: 30.0)
 //
 //
 //        // Display new image on imageView
@@ -69,22 +69,22 @@ class ViewController: UIViewController {
 //        image = downSampleBy2(inputImage: image!)
 //        image = downSampleBy2(inputImage: image!)
         let sigma = 1.6
-//        let extrema = detectExtrema(inputImage: image!, sigma: sigma)
+        let extrema = detectExtrema(inputImage: image!, sigma: sigma)
 //        imageView.image = UIImage.init(ciImage: extrema[0])
         // ------------------------------------------------------------------------------------------------
         
         let k = 1.41421356237 // sqrt(2)
         
         // Stack of blurred images
-//        let blurredImage1 = gaussianBlur(inputImage: image!, sigma: sigma)
-//        let blurredImage2 = gaussianBlur(inputImage: image!, sigma: sigma * k)
-//        let blurredImage3 = gaussianBlur(inputImage: image!, sigma: sigma * k * k)
-//        let blurredImage4 = gaussianBlur(inputImage: image!, sigma: sigma * k * k * k)
-//        let blurredImage5 = gaussianBlur(inputImage: image!, sigma: sigma * k * k * k * k)
+        let blurredImage1 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma))
+        let blurredImage2 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k))
+        let blurredImage3 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k))
+        let blurredImage4 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k))
+        let blurredImage5 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k * k))
 //
-//        let output = eliminateUnstableKeypoints(map: extrema[1], src: blurredImage3, hiImg: blurredImage4, hiHiImg: blurredImage5, loImg: blurredImage2, loLoImg: blurredImage1)
+        let output = eliminateUnstableKeypoints(map: extrema[1], src: blurredImage3, hiImg: blurredImage4, hiHiImg: blurredImage5, loImg: blurredImage2, loLoImg: blurredImage1)
         
-        imageView.image = UIImage.init(ciImage: image!)
+        imageView.image = UIImage.init(ciImage: output)
 
         print("whats up")
         

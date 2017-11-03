@@ -10,9 +10,9 @@
 #import "gaussian1X.h"
 
 @implementation gaussian1X
-
-static CIKernel *gaussian1XKernel = nil;
-
+    
+    static CIKernel *gaussian1XKernel = nil;
+    
 - (id)init {
     if(gaussian1XKernel == nil)
     {
@@ -28,44 +28,44 @@ static CIKernel *gaussian1XKernel = nil;
     
     return [super init];
 }
-
-- (CIImage *)outputImage
-{
-    CISampler * src = [CISampler samplerWithImage: inputImage];
-    CGRect      DOD = src.extent;
-    NSNumber  * width = [NSNumber numberWithFloat:src.extent.size.width];
-    NSNumber  * origin = [NSNumber numberWithFloat:src.extent.origin.x];
     
-    return [gaussian1XKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
-        return CGRectInset(destRect, -30, 0);
-    } arguments: @[
-                   src,
-                   inputSigma,
-                   width,
-                   origin]];
-}
-
-// registration
+- (CIImage *)outputImage
+    {
+        CISampler * src = [CISampler samplerWithImage: inputImage];
+        CGRect      DOD = src.extent;
+        NSNumber  * width = [NSNumber numberWithFloat:src.extent.size.width];
+        NSNumber  * origin = [NSNumber numberWithFloat:src.extent.origin.x];
+        
+        return [gaussian1XKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
+            return CGRectInset(destRect, -30, 0);
+        } arguments: @[
+                       src,
+                       inputSigma,
+                       width,
+                       origin]];
+    }
+    
+    // registration
 + (void)initialize
-{
-    [CIFilter registerFilterName: @"Gaussian1X"
-                     constructor: self
-                 classAttributes:
-     @{kCIAttributeFilterDisplayName : @"Gaussian_1D_X",
-       kCIAttributeFilterCategories : @[
-               kCICategoryColorAdjustment, kCICategoryVideo,
-               kCICategoryStillImage, kCICategoryInterlaced,
-               kCICategoryNonSquarePixels]}
-     ];
-}
-
-// Method that creates instance of filter
+    {
+        [CIFilter registerFilterName: @"Gaussian1X"
+                         constructor: self
+                     classAttributes:
+         @{kCIAttributeFilterDisplayName : @"Gaussian_1D_X",
+           kCIAttributeFilterCategories : @[
+                   kCICategoryColorAdjustment, kCICategoryVideo,
+                   kCICategoryStillImage, kCICategoryInterlaced,
+                   kCICategoryNonSquarePixels]}
+         ];
+    }
+    
+    // Method that creates instance of filter
 + (CIFilter *)filterWithName: (NSString *)name
-{
-    CIFilter  *filter;
-    filter = [[self alloc] init];
-    return filter;
-}
-
+    {
+        CIFilter  *filter;
+        filter = [[self alloc] init];
+        return filter;
+    }
+    
 @end
 

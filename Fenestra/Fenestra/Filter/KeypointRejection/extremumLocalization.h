@@ -14,9 +14,9 @@
 {
     CIImage   *inputMap;
     CIImage   *inputImage;
-    CIImage   *inputLowerScaleImage;
     CIImage   *inputHigherScaleImage; 
-    NSNumber  *inputSigma; // determines window size 
+    CIImage   *inputLowerScaleImage;
+    NSNumber  *inputSigma; 
 }
 
 @end

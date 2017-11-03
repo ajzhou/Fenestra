@@ -122,6 +122,7 @@ extension ViewController {
     
     // Eliminate unstable keypoints
     func eliminateUnstableKeypoints(map: CIImage, src: CIImage, hiImg: CIImage, hiHiImg: CIImage, loImg: CIImage, loLoImg: CIImage) -> CIImage {
+        // offset
         let findOffset = CIFilter(name: "calculateOffset")
         findOffset?.setValue(map, forKey: "inputMap")
         findOffset?.setValue(src, forKey: "inputImage")
@@ -129,8 +130,24 @@ extension ViewController {
         findOffset?.setValue(hiHiImg, forKey: "inputHigherHigherScaleImage")
         findOffset?.setValue(loImg, forKey: "inputLowerScaleImage")
         findOffset?.setValue(loLoImg, forKey: "inputLowerLowerScaleImage")
+        let mapWOffset = (findOffset?.outputImage)!
         
-        return (findOffset?.outputImage)!
+        // localization
+        let localizer = CIFilter(name: "extremumLocalization")
+        localizer?.setValue(mapWOffset, forKey: "inputMap")
+        localizer?.setValue(src, forKey: "inputImage")
+        localizer?.setValue(hiImg, forKey: "inputHigherScaleImage")
+        localizer?.setValue(loImg, forKey: "inputLowerScaleImage")
+        localizer?.setValue(3.2, forKey: "inputSigma")  // sigma hard coded for now
+        
+//        CIImage   *inputMap;
+//        CIImage   *inputImage;
+//        CIImage   *inputLowerScaleImage;
+//        CIImage   *inputHigherScaleImage;
+//        NSNumber  *inputSigma; // determines window size 
+        
+        
+        return (localizer?.outputImage)!
     }
 
 }

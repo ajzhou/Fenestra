@@ -18,7 +18,7 @@ static CIKernel *extremumLocalizationKernel = nil;
     {
         NSBundle    *bundle = [NSBundle bundleForClass: [self class]];
         
-        NSString *fullPath = [[NSBundle mainBundle] pathForResource:@"extrememLocalization"
+        NSString *fullPath = [[NSBundle mainBundle] pathForResource:@"extremumLocalization"
                                                              ofType:@"cikernel"];
         NSString    *code = [NSString stringWithContentsOfFile:fullPath encoding: NSASCIIStringEncoding error: NULL];
         

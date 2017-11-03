@@ -2,7 +2,7 @@ float roundNum(float x){
 if (mod(x,1.0) < 0.5) return floor(x);
 return ceil(x);
 }
-
+// -------------------------------------------------------------------------------
 vec3 calculate1stDerivative(vec2 dc, sampler src, sampler hiImg, sampler loImg)
 {
 vec4 extent = samplerExtent(src);
@@ -11,7 +11,7 @@ vec4 extent = samplerExtent(src);
 float xLo = dc.x - 1.0;
 if (xLo < extent[0]) xLo = dc.x;
 float xHi = dc.x + 1.0;
-if (xHi >= extent[2]) xHi = dc.x;
+if (xHi >= (extent[0]+extent[2])) xHi = dc.x;
 float dx = sample(src, samplerTransform(src, vec2(xHi,dc.y))).a - sample(src, samplerTransform(src, vec2(xLo,dc.y))).a;
 
 
@@ -27,7 +27,7 @@ float ds = sample(hiImg, samplerTransform(hiImg, dc)).a - sample(loImg, samplerT
 
 return vec3(dx,dy,ds);
 }
-
+// -------------------------------------------------------------------------------
 kernel vec4 calculateOffset(sampler map, sampler src, sampler hiImg, sampler hiHiImg, sampler loImg, sampler loLoImg)
 {
 vec2 dc = destCoord();

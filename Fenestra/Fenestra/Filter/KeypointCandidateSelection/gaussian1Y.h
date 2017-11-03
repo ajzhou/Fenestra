@@ -11,11 +11,11 @@
 #import <CoreImage/CoreImage.h>
 
 @interface gaussian1Y: CIFilter
-{
-    CIImage   *inputImage;
-    NSNumber  *inputSigma;
-}
-
+    {
+        CIImage   *inputImage;
+        NSNumber  *inputSigma;
+    }
+    
 @end
 
 #endif /* gaussian1Y_h */

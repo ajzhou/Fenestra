@@ -1,6 +1,11 @@
+float roundNum(float x){
+if (mod(x,1.0) < 0.5) return floor(x);
+return ceil(x);
+}
+// --------------------------------------------------------
 kernel vec4 extremumLocalization(sampler map, sampler src, sampler hiImg, sampler loImg, float sigma)
 {
-float radius = round(3 * sigma);
+float radius = roundNum(3.0 * sigma);
 vec2 dc = destCoord();
 
 vec4 indicator = sample(map, samplerTransform(map, dc));
