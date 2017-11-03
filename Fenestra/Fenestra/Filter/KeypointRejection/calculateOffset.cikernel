@@ -1,20 +1,25 @@
+float roundNum(float x){
+if (mod(x,1.0) < 0.5) return floor(x);
+return ceil(x);
+}
+
 vec3 calculate1stDerivative(vec2 dc, sampler src, sampler hiImg, sampler loImg)
 {
 vec4 extent = samplerExtent(src);
 
 // find dx
-float xLo = dc.x - 1;
+float xLo = dc.x - 1.0;
 if (xLo < extent[0]) xLo = dc.x;
-float xHi = dc.x + 1;
-if (xHi > extent[2]) xHi = dc.x;
+float xHi = dc.x + 1.0;
+if (xHi >= extent[2]) xHi = dc.x;
 float dx = sample(src, samplerTransform(src, vec2(xHi,dc.y))).a - sample(src, samplerTransform(src, vec2(xLo,dc.y))).a;
 
 
 // find dy
-float yLo = dc.y - 1;
+float yLo = dc.y - 1.0;
 if (yLo < extent[1]) yLo = yLo = dc.y;
-float yHi = dc.y + 1;
-if (yHi > extent[3]) yHi = dc.y;
+float yHi = dc.y + 1.0;
+if (yHi >= extent[3]) yHi = dc.y;
 float dy = sample(src, samplerTransform(src, vec2(dc.x,yHi))).a - sample(src, samplerTransform(src, vec2(dc.x,yLo))).a;
 
 // find ds
@@ -27,7 +32,7 @@ kernel vec4 calculateOffset(sampler map, sampler src, sampler hiImg, sampler hiH
 {
 vec2 dc = destCoord();
 vec4 indicator = sample(map, samplerTransform(map, dc));
-if (indicator == 0.0) return vec4(0.0);
+if (indicator.a == 0.0) return vec4(0.0);
 
 // MARK:- first derivative at dc
 vec3 d = calculate1stDerivative(dc, src, hiImg, loImg);
@@ -35,12 +40,12 @@ vec3 d = calculate1stDerivative(dc, src, hiImg, loImg);
 // MARK:- find inverse of second derivative
 // find second derivative
 // find ddx
-vec3 dxLo = calculate1stDerivative(vec2(dc.x-1,dc.y), src, hiImg, loImg);
-vec3 dxHi = calculate1stDerivative(vec2(dc.x+1,dc.y), src, hiImg, loImg);
+vec3 dxLo = calculate1stDerivative(vec2(dc.x-1.0,dc.y), src, hiImg, loImg);
+vec3 dxHi = calculate1stDerivative(vec2(dc.x+1.0,dc.y), src, hiImg, loImg);
 vec3 ddx  = dxHi - dxLo;
 // find ddy
-vec3 dyLo = calculate1stDerivative(vec2(dc.x,dc.y-1), src, hiImg, loImg);
-vec3 dyHi = calculate1stDerivative(vec2(dc.x,dc.y+1), src, hiImg, loImg);
+vec3 dyLo = calculate1stDerivative(vec2(dc.x,dc.y-1.0), src, hiImg, loImg);
+vec3 dyHi = calculate1stDerivative(vec2(dc.x,dc.y+1.0), src, hiImg, loImg);
 vec3 ddy  = dyHi - dyLo;
 // find dds
 vec3 dsLo = calculate1stDerivative(dc, loImg, src, loLoImg);
@@ -49,7 +54,7 @@ vec3 dds  = dsHi - dsLo;
 
 // find 1/det
 float det = (ddx[0] * ddy[1] * dds[2]) + (ddy[0] + dds[1] + ddx[2]) + (dds[0] + ddx[1] + ddy[2]) - (ddy[0] * ddx[1] * dds[2]) - (ddx[0] * dds[1] * ddy[2]) - (dds[0] * ddy[1] * ddx[2]);
-float detInv = 1/det;
+float detInv = 1.0/det;
 
 // find transpose of cofactor matrix
 // first row
@@ -78,14 +83,14 @@ vec3 offset = vec3(-1.0 * dot(ddInvR0,d), -1.0 * dot(ddInvR1,d), -1.0 * dot(ddIn
 
 // reject low contrast
 float D = sample(src, samplerTransform(src, dc)).a;
-float stability = abs(D + (1/2) * dot(d,offset));
+float stability = abs(D + (1.0/2.0) * dot(d,offset));
 if (stability < 0.03) return vec4(0.0);
 
 // MARK:- localize keypoint. If any component of offset is greater than 0.5, record offset.
 if (offset[0] > 0.5 || offset[1] > 0.5 || offset[2] > 0.5) {
-float newX = dc.x + round(offset[0]);
-float newY = dc.y + round(offset[1]);
-float newS = indicator[2] + round(offset[2]);
+float newX = dc.x + roundNum(offset[0]);
+float newY = dc.y + roundNum(offset[1]);
+float newS = indicator[2] + roundNum(offset[2]);
 return vec4(newX, newY, newS, 0.5);
 } else { // extremum is at sample point
 return vec4(0.0, 0.0, indicator[2], 1.0); // sample point is keypoint, also record sigma

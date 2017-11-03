@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-
+// SIFT Detector functions
 extension ViewController {
     // grayscale images
     func rgb2gray(inputImage: CIImage) -> CIImage {
@@ -56,12 +56,12 @@ extension ViewController {
         gaussian1X?.setValue(inputImage, forKey: kCIInputImageKey)
         gaussian1X?.setValue(sigma, forKey: "inputSigma")
         let output1X = gaussian1X?.outputImage
-        
+                
         let gaussian1Y = CIFilter(name: "gaussian1Y")
         gaussian1Y?.setValue(output1X, forKey: kCIInputImageKey)
         gaussian1Y?.setValue(sigma, forKey: "inputSigma")
         let convolvedImg = gaussian1Y?.outputImage
-        
+
         return convolvedImg!
     }
     
@@ -79,7 +79,9 @@ extension ViewController {
     }
     
     // Detect local extrema in one octave
-    func detectExtrema(inputImage: CIImage, sigma: Double)-> CIImage{
+    func detectExtrema(inputImage: CIImage, sigma: Double)-> [CIImage]{
+        var extrema = [CIImage]()
+        
         let image = rgb2gray(inputImage: inputImage)
 //        let image = inputImage
         let k = 1.41421356237 // sqrt(2)
@@ -105,14 +107,30 @@ extension ViewController {
         comp26?.setValue(diffGauss3, forKey: "inputComparison2")
         comp26?.setValue(sigma * k, forKey: "inputSigma")
         let extrema1 = comp26?.outputImage
+        extrema.append(extrema1!)
+        
         // Next compare diffGauss2,3,4 | with diffGauss3 in the middle of stack
         comp26?.setValue(diffGauss3, forKey: "inputImage")
         comp26?.setValue(diffGauss2, forKey: "inputComparison1")
         comp26?.setValue(diffGauss4, forKey: "inputComparison2")
         comp26?.setValue(sigma * k * k * k, forKey: "inputSigma")
         let extrema2 = comp26?.outputImage
+        extrema.append(extrema2!)
+    
+        return extrema
+    }
+    
+    // Eliminate unstable keypoints
+    func eliminateUnstableKeypoints(map: CIImage, src: CIImage, hiImg: CIImage, hiHiImg: CIImage, loImg: CIImage, loLoImg: CIImage) -> CIImage {
+        let findOffset = CIFilter(name: "calculateOffset")
+        findOffset?.setValue(map, forKey: "inputMap")
+        findOffset?.setValue(src, forKey: "inputImage")
+        findOffset?.setValue(hiImg, forKey: "inputHigherScaleImage")
+        findOffset?.setValue(hiHiImg, forKey: "inputHigherHigherScaleImage")
+        findOffset?.setValue(loImg, forKey: "inputLowerScaleImage")
+        findOffset?.setValue(loLoImg, forKey: "inputLowerLowerScaleImage")
         
-        return extrema1!
+        return (findOffset?.outputImage)!
     }
 
 }

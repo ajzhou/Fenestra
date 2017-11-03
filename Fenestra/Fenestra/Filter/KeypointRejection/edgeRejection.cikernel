@@ -14,7 +14,7 @@ vec4 extent = samplerExtent(src);
 float yLo = dc.y - 1;
 if (yLo < extent[1]) yLo = dc.y;
 float yHi = dc.y + 1;
-if (yHi > (extent[1] + extent[3])) yHi = dc.y;
+if (yHi >= (extent[1] + extent[3])) yHi = dc.y;
 
 return sample(src, samplerTransform(src, vec2(dc.x, yHi))).a - sample(src, samplerTransform(src, vec2(dc.x, yLo))).a;
 
@@ -31,44 +31,25 @@ if (indicator.a == 0.0) return vec4(0.0);
 vec4 extent = samplerExtent(src);
 
 // find dxx
-float xLoLo = dc.x - 2;
-if (xLoLo < extent[0]) xLoLo = dc.x;
-float xHiHi = dc.x + 2;
-if (xHiHi > (extent[0] + extent[2])) xHiHi = dc.x;
-float dxLo = dx(src, dc) - dx(src, vec2(xLoLo,dc.y));
-float dxHi = dx(src, vec2(xHiHi,dc.y)) - dx(src, dc);
-float dxx = dxHi - dxLo;
-
-// find dyy
-float yLoLo = dc.y - 2;
-if (yLoLo < extent[1]) yLoLo = dc.y;
-float yHiHi = dc.y + 2;
-if (yHiHi > (extent[1] + extent[3])) yHiHi = dc.y
-float dyLo = dy(src, dc) - dy(src, vec2(dc.x, yLoLo));
-float dyHi = dy(src, vec2(dc.x, yHiHi)) - dy(src, dc);
-float dyy = dyHi - dyLo;
-
-// find dxy
 float xLo = dc.x - 1;
 if (xLo < extent[0]) xLo = dc.x;
 float xHi = dc.x + 1;
 if (xHi > (extent[0] + extent[2])) xHi = dc.x;
+
+float dxx = dx(src, vec2(xHi,dc.y)) - dx(src, vec2(xLo,dc.y));
+
+
+// find dyy
 float yLo = dc.y - 1;
 if (yLo < extent[1]) yLo = dc.y;
 float yHi = dc.y + 1;
-if (yHi > (extent[1] + extent[3])) yHi = dc.y;
-float xHi = dc.x + 1;
-if (xHi > (extent[0] + extent[2])) xHi = dc.x;
+if (yHi >= (extent[1] + extent[3])) yHi = dc.y;
 
-float dxHiyLo = dx(src, vec2(xHi, yLo)) - dx(src, vec2(dc.x, yLo));
-float dxLoyLo = dx(src, vec2(dc.x, yLo)) - dx(src, vec2(xLo,yLo));
-float dxyLo = dxHiyLo - dxLoyLo;
+float dyy = dy(src, vec2(dc.x, yHi)) - dy(src, vec2(dc.x, yLo));
 
-float dxHiyHi = dx(src, ve2(xHi, yHi)) - dx(src, vec2(dc.x, yHi));
-float dxLoyHi = dx(src, vec2(dc.x, yHi)) - dx(src, vec2(xLo, yHi));
-float dxyHi = dxHiyHi - dxLoyHi;
+// find dxy
+float dxy = dx(src, vec2(dc.x, yHi)) - dx(src, vec2(dc.x, yLo));
 
-float dxy = dxyHi - dxyLo;
 
 // find trace and determinant of Hessian
 float trace = dxx + dyy;
@@ -76,7 +57,7 @@ float det = dxx * dyy - dxy * dxy;
 
 // check principal curvature ratio
 float ratio = trace * trace / det;
-float threshold = (r + 1) * (r + 1) / r
+float threshold = (r + 1) * (r + 1) / r;
 if (ratio > threshold) return vec4(0.0);
 
 return indicator;
