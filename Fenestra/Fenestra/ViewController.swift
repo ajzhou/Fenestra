@@ -10,10 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var imageView = UIImageView()
-//    var imageView2 = UIImageView()
-//    var imageView3 = UIImageView()
-//    var imageView4 = UIImageView()
+    var imageView1 = UIImageView()
+    var imageView2 = UIImageView()
+    var imageView3 = UIImageView()
+    var imageView4 = UIImageView()
+    var imageView5 = UIImageView()
+    var imageView6 = UIImageView()
     var image : CIImage?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,24 +25,47 @@ class ViewController: UIViewController {
 //        image = rgb2gray(inputImage: image!)
         
         // setup ImageView
-        view.addSubview(imageView);
-//        view.addSubview(imageView2);
-//        view.addSubview(imageView3);
-//        view.addSubview(imageView4);
-        view.addConstraintsWithFormat(format: "H:|[v0]|", views: imageView)
-        view.addConstraintsWithFormat(format: "V:|[v0]|", views: imageView)
-        imageView.isUserInteractionEnabled = true
-        imageView.contentMode = .scaleAspectFit
+        let container1 = UIStackView.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3))
+        container1.axis = .horizontal
+        container1.addArrangedSubview(imageView1)
+        container1.addArrangedSubview(imageView2)
+        container1.distribution = .fillEqually
+        let container2 = UIStackView.init(frame: CGRect(x: 0 , y: UIScreen.main.bounds.height / 3, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3))
+        container2.axis = .horizontal
+        container2.addArrangedSubview(imageView3)
+        container2.addArrangedSubview(imageView4)
+        container2.distribution = .fillEqually
+        let container3 = UIStackView.init(frame: CGRect(x: 0, y: UIScreen.main.bounds.height / 3 * 2, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3))
+        container3.axis = .horizontal
+        container3.addArrangedSubview(imageView5)
+        container3.addArrangedSubview(imageView6)
+        container3.distribution = .fillEqually
+        view.addSubview(container1)
+        view.addSubview(container2)
+        view.addSubview(container3)
+
+        imageView1.contentMode = .scaleAspectFit
+        imageView2.contentMode = .scaleAspectFit
+        imageView3.contentMode = .scaleAspectFit
+        imageView4.contentMode = .scaleAspectFit
+        imageView5.contentMode = .scaleAspectFit
+        imageView6.contentMode = .scaleAspectFit
+        
+        //        imageView2.backgroundColor = UIColor.blue
+        //        imageView3.backgroundColor = UIColor.red
+        //        imageView4.backgroundColor = UIColor.yellow
+        //        imageView5.backgroundColor = UIColor.green
+        //        imageView6.backgroundColor = UIColor.cyan
         
         // setup Tap
         setupTap()
         
         // Display Original Image
-        imageView.image = UIImage(ciImage: image!)
+        imageView1.image = UIImage(ciImage: image!)
     }
     
     func setupTap() {
-        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
     
     @objc func handleTap() {
@@ -84,7 +109,7 @@ class ViewController: UIViewController {
 //
         let output = eliminateUnstableKeypoints(map: extrema[1], src: blurredImage3, hiImg: blurredImage4, hiHiImg: blurredImage5, loImg: blurredImage2, loLoImg: blurredImage1)
         
-        imageView.image = UIImage.init(ciImage: output)
+//        imageView1.image = UIImage.init(ciImage: output)
 
         print("whats up")
         

@@ -25,7 +25,7 @@ if (nc.y < extent[1] || nc.y >= (extent[1]+extent[3])) nc = vec2(nc.x, dc.y -j);
 
 vec4 checker = sample(map, samplerTransform(map, nc));
 if (checker.a == 0.5){
-if (checker[0] == dc.x && checker[1] == dc.y) return vec4(0.0, 0.0, indicator[2], 1.0);
+if (checker[0] == dc.x && checker[1] == dc.y) return vec4(0.0, 0.0, indicator[2], 1.0); 
 }
 }
 }

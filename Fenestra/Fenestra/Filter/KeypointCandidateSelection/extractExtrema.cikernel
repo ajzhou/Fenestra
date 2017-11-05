@@ -2,7 +2,7 @@
 kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2, float sigma)
 {
 vec4 black = vec4(0.0,0.0,sigma,1.0);
-vec4 white = vec4(0.0,0.0,sigma,0.0);
+vec4 white = vec4(0.0,0.0,sigma,0.0);  // return if neither max nor min
 
 float ox = samplerExtent(src)[0];
 float oy = samplerExtent(src)[1];
@@ -32,6 +32,7 @@ float comp2 = sample(comparison2, samplerTransform(comparison2, nc)).a;
 float comp3 = sample(src, samplerTransform(src, nc)).a;
 
 if (max == true) {
+// center point, do not compare to self
 if (i == 0 && j == 0) {
 if (comp1 > pix || comp2 > pix) {
 max = false;

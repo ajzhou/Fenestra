@@ -1,16 +1,32 @@
-float gaussian1D(float x, float sigma){
+float roundNum(float x){
+if (mod(x,1.0) < 0.5) return floor(x);
+return ceil(x);
+}
+
+float kernelSum(float sigma, float radius)
+{
+float M_PI = 3.1415926535897932384626433832795;
+float sum = 0.0;
+for (float x=-radius; x<=radius; x+=1.0){
+sum += (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (x * x) / (2.0 * (sigma * sigma)));
+}
+return sum;
+}
+
+float gaussian1D(float x, float sigma, float sum){
 const float M_PI = 3.1415926535897932384626433832795;
-return (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (x * x) / (2.0 * (sigma * sigma)));
+return (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (x * x) / (2.0 * (sigma * sigma))) / sum;
 }
 
 kernel vec4 gaussian1X(sampler image,float sigma,float width,float origin)
 {
-const int radius = int(sigma) * 3;
+float radius = roundNum(3.0 * sigma);
+float sum = kernelSum(sigma, radius);
 vec4 s = vec4(0.0);
 vec2 dc = destCoord();
 
-for (int x=-radius; x<=radius; x++){
-float g = gaussian1D(float(x),sigma);
+for (float x=-radius; x<=radius; x+=1.0){
+float g = gaussian1D(x,sigma, sum);
 vec2 offset = vec2(x,0);
 vec2 tp = dc + offset;
 if (tp.x < origin || tp.x >= width+origin) {

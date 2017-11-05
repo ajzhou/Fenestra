@@ -116,6 +116,11 @@ extension ViewController {
         comp26?.setValue(sigma * k * k * k, forKey: "inputSigma")
         let extrema2 = comp26?.outputImage
         extrema.append(extrema2!)
+        
+        // ImageView display
+        imageView2.image = UIImage(ciImage: diffGauss2)
+        imageView3.image = UIImage(ciImage: diffGauss4)
+        imageView4.image = UIImage(ciImage: extrema1!)
     
         return extrema
     }
@@ -147,6 +152,9 @@ extension ViewController {
         edger?.setValue(src, forKey: "inputImage")
         edger?.setValue(10.0, forKey: "inputThreshold") // r value hard coded
         
+        // ImageView display
+        imageView5.image = UIImage(ciImage: mapLocalized)
+        imageView6.image = UIImage(ciImage: (edger?.outputImage)!)
         
         return (edger?.outputImage)!
     }
