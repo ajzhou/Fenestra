@@ -61,7 +61,8 @@ class ViewController: UIViewController {
         setupTap()
         
         // Display Original Image
-        imageView1.image = UIImage(ciImage: image!)
+        imageView1.image =  UIImage(ciImage: rgb2gray(inputImage:image!))
+    
     }
     
     func setupTap() {
