@@ -82,7 +82,8 @@ extension ViewController {
     func detectExtrema(inputImage: CIImage, sigma: Double)-> [CIImage]{
         var extrema = [CIImage]()
         
-        let image = rgb2gray(inputImage: inputImage)
+        var image = rgb2gray(inputImage: inputImage)
+//        image = downSampleBy2(inputImage: image)
 //        let image = inputImage
         let k = 1.41421356237 // sqrt(2)
         
@@ -118,8 +119,17 @@ extension ViewController {
         extrema.append(extrema2!)
         
         // ImageView display
-        imageView2.image = UIImage(ciImage: diffGauss3)
-        imageView3.image = UIImage(ciImage: extrema1!)
+//        imageView3.image = UIImage(ciImage: extrema1!)
+//        imageView5.image = UIImage(ciImage: extrema2!)
+        
+        imageView2.image = UIImage(ciImage: diffGauss1)
+        imageView3.image = UIImage(ciImage: diffGauss2)
+        imageView4.image = UIImage(ciImage: diffGauss3)
+        imageView5.image = UIImage(ciImage: diffGauss4)
+        imageView6.image = UIImage(ciImage: extrema1!)
+    
+
+        
     
         return extrema
     }
@@ -152,9 +162,9 @@ extension ViewController {
         edger?.setValue(10.0, forKey: "inputThreshold") // r value hard coded
         
         // ImageView display
-        imageView4.image = UIImage(ciImage: mapWOffset)
-        imageView5.image = UIImage(ciImage: mapLocalized)
-        imageView6.image = UIImage(ciImage: (edger?.outputImage)!)
+//        imageView4.image = UIImage(ciImage: mapWOffset)
+//        imageView5.image = UIImage(ciImage: mapLocalized)
+//        imageView6.image = UIImage(ciImage: (edger?.outputImage)!)
         
         return (edger?.outputImage)!
     }

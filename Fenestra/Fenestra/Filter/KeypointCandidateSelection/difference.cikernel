@@ -1,9 +1,17 @@
 // note that difference function subtracts only the aplha values; it is assuming r,g,b has zero entries
 kernel vec4 difference(sampler imgLo,sampler imgHi)
 {
-vec2 dc = destCoord();
-float h = sample(imgHi, samplerTransform(imgHi, dc)).a;
-float l = sample(imgLo, samplerTransform(imgLo, dc)).a;
+    vec2 dc = destCoord();
+    float h = sample(imgHi, samplerTransform(imgHi, dc)).a;
+    float l = sample(imgLo, samplerTransform(imgLo, dc)).a;
 
-return vec4(0.0, 0.0, 0.0, h-l);
+    float d = h-l;
+
+    if (h > l) {
+        return vec4(d, 0.0, 0.0, 1.0);
+    } else {
+        return vec4(0.0, -d, 0.0, 1.0);
+    }
+
+    return vec4(0.0, 0.0, 0.0, 1.0);
 }

@@ -94,21 +94,21 @@ class ViewController: UIViewController {
         // code to test extractExtrema() ------------------------------------------------------------------
 //        image = downSampleBy2(inputImage: image!)
 //        image = downSampleBy2(inputImage: image!)
-        let sigma = 1.6
+        let sigma = 4.0
         let extrema = detectExtrema(inputImage: image!, sigma: sigma)
 //        imageView.image = UIImage.init(ciImage: extrema[0])
         // ------------------------------------------------------------------------------------------------
         
-        let k = 1.41421356237 // sqrt(2)
-        
-        // Stack of blurred images
-        let blurredImage1 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma))
-        let blurredImage2 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k))
-        let blurredImage3 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k))
-        let blurredImage4 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k))
-        let blurredImage5 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k * k))
-//
-        let output = eliminateUnstableKeypoints(map: extrema[1], src: blurredImage3, hiImg: blurredImage4, hiHiImg: blurredImage5, loImg: blurredImage2, loLoImg: blurredImage1)
+//        let k = 1.41421356237 // sqrt(2)
+//        
+//        // Stack of blurred images
+//        let blurredImage1 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma))
+//        let blurredImage2 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k))
+//        let blurredImage3 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k))
+//        let blurredImage4 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k))
+//        let blurredImage5 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k * k))
+////
+//        let output = eliminateUnstableKeypoints(map: extrema[1], src: blurredImage3, hiImg: blurredImage4, hiHiImg: blurredImage5, loImg: blurredImage2, loLoImg: blurredImage1)
         
 //        imageView1.image = UIImage.init(ciImage: output)
 

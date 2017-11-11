@@ -1,74 +1,63 @@
 // ExtractExtrema code for grayscale images
 kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2, float sigma)
 {
-vec4 black = vec4(0.0,0.0,sigma,1.0);
-vec4 white = vec4(0.0,0.0,sigma,0.0);  // return if neither max nor min
+    vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 
-float ox = samplerExtent(src)[0];
-float oy = samplerExtent(src)[1];
-float width = samplerExtent(src)[2];
-float height = samplerExtent(src)[3];
+    vec2 dc = destCoord();
+    vec4 p  = sample(src, samplerTransform(src, dc));
 
-vec2 dc = destCoord();
-float pix = sample(src, samplerTransform(src, dc)).a;
-if (pix == 0.0) {
-return white;
-}
+    if (p.r == 0.0 && p.g == 0.0) return BLACK;
 
-bool max = true;
-bool min = true;
-for (int i=-1; i<=1; i++){
-for (int j=-1; i<=1; i++){
-vec2 offset = vec2(i,j);
-vec2 nc = dc + offset;
 
-// check out of bounds
-if (nc.x<ox || nc.y<oy || nc.x >= width+ox || nc.y >=width+oy) {
-nc = dc - offset;  // currently reflecting back over border because cannot jump ahead
-}
+    // check max through R channel
+    if (p.r != 0.0) {
+        for (int i = -1; i <= 1; i++ ) {
+            for (int j = -1; j <= 1; j++){
+                vec2 offset = vec2(float(i),float(j));
+                vec2 nc = dc + offset;
 
-float comp1 = sample(comparison1, samplerTransform(comparison1, nc)).a;
-float comp2 = sample(comparison2, samplerTransform(comparison2, nc)).a;
-float comp3 = sample(src, samplerTransform(src, nc)).a;
+                // check out of bounds; reflect back if out of bounds
+                vec4 extent = samplerExtent(src);
+                if (nc.x<extent[0] || nc.y<extent[1] || nc.x>=(extent[0]+extent[2]) || nc.y>=(extent[1]+extent[3])) nc = dc - offset;
 
-if (max == true) {
-// center point, do not compare to self
-if (i == 0 && j == 0) {
-if (comp1 > pix || comp2 > pix) {
-max = false;
-if (min == false) {
-return white;
-}
-}
-} else {
-if (comp1 > pix || comp2 > pix || comp3 > pix) {
-max = false;
-if (min == false) {
-return white;
-}
-}
-}
-}
-if (min == true) {
-if (i == 0 && j == 0) {
-if (comp1 < pix || comp2 < pix) {
-min = false;
-if (max == false) {
-return white;
-}
-}
-} else {
-if (comp1 < pix || comp2 < pix || comp3 < pix) {
-min = false;
-if (max == false) {
-return white;
-}
-}
-}
+                // if it is not maximum, return BLACK
+                float comp1    = sample(comparison1, samplerTransform(comparison1, nc)).r;
+                float comp2    = sample(comparison2, samplerTransform(comparison2, nc)).r;
+                float compSelf = sample(src, samplerTransform(src, nc)).r;
+                if (i==0 && j==0) { // do not compare self at origin
+                    if (comp1 > p.r || comp2 > p.r) return BLACK;
+                } else {
+                    if (comp1 > p.r || comp2 > p.r || compSelf > p.r) return BLACK;
+                }
+            }
+        }
+        // found max in red channel
+        return p;
+    } else { // check max in green channel; equivalent of finding minimum
+        for (int i = -1; i <= 1; i++ ) {
+            for (int j = -1; j <= 1; j++){
+                vec2 offset = vec2(i,j);
+                vec2 nc = dc + offset;
+
+                // check out of bounds; reflect back if out of bounds
+                vec4 extent = samplerExtent(src);
+                if (nc.x<extent[0] || nc.y<extent[1] || nc.x >= extent[0]+extent[2] || nc.y >=extent[1]+extent[3]) nc = dc - offset;
+
+                // if it is not maximum, return BLACK
+                float comp1    = sample(comparison1, samplerTransform(comparison1, nc)).g;
+                float comp2    = sample(comparison2, samplerTransform(comparison2, nc)).g;
+                float compSelf = sample(src, samplerTransform(src, nc)).g;
+                if (i==0 && j==0) { // do not compare self at origin
+                    if (comp1 > p.g || comp2 > p.g) return BLACK;
+                } else {
+                    if (comp1 > p.g || comp2 > p.g || compSelf > p.r) return BLACK;
+                }
+            }
+        }
+        // found max in green channel
+        return p;
+    }
+
+    return BLACK; // safe condition
 }
 
-}
-}
-
-return black;
-}
