@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A1F2CCB1FBB5CD2001E069B /* magNori.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A1F2CCA1FBB5CD2001E069B /* magNori.m */; };
+		6A1F2CCE1FBB5CF9001E069B /* magNori.cikernel in Resources */ = {isa = PBXBuildFile; fileRef = 6A1F2CCD1FBB5CF9001E069B /* magNori.cikernel */; };
 		6A268BF41FA6474C00481258 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A268BF31FA6474C00481258 /* AppDelegate.swift */; };
 		6A268BF61FA6474C00481258 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A268BF51FA6474C00481258 /* ViewController.swift */; };
 		6A268BF91FA6474C00481258 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A268BF71FA6474C00481258 /* Main.storyboard */; };
@@ -53,6 +55,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6A1F2CCA1FBB5CD2001E069B /* magNori.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = magNori.m; sourceTree = "<group>"; };
+		6A1F2CCC1FBB5CE0001E069B /* magNori.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = magNori.h; sourceTree = "<group>"; };
+		6A1F2CCD1FBB5CF9001E069B /* magNori.cikernel */ = {isa = PBXFileReference; lastKnownFileType = text; path = magNori.cikernel; sourceTree = "<group>"; };
 		6A268BF01FA6474C00481258 /* Fenestra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fenestra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A268BF31FA6474C00481258 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A268BF51FA6474C00481258 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -179,8 +184,9 @@
 		6A268C241FA6478D00481258 /* Filter */ = {
 			isa = PBXGroup;
 			children = (
-				6A4F8EBD1FAAB60C00FEC879 /* KeypointCandidateSelection */,
+				6A4F8EBD1FAAB60C00FEC879 /* Detector */,
 				6A4F8EBC1FAAB57E00FEC879 /* KeypointRejection */,
+				6AE85BDE1FB7991600021E92 /* Descriptor */,
 			);
 			path = Filter;
 			sourceTree = "<group>";
@@ -194,14 +200,11 @@
 				6A4F8EC31FAAB88600FEC879 /* extremumLocalization.m */,
 				6A4F8EC51FAAB89900FEC879 /* extremumLocalization.h */,
 				6A4F8EC61FAAB8A900FEC879 /* extremumLocalization.cikernel */,
-				6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */,
-				6A4F8ECF1FAABA2500FEC879 /* edgeRejection.h */,
-				6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */,
 			);
 			path = KeypointRejection;
 			sourceTree = "<group>";
 		};
-		6A4F8EBD1FAAB60C00FEC879 /* KeypointCandidateSelection */ = {
+		6A4F8EBD1FAAB60C00FEC879 /* Detector */ = {
 			isa = PBXGroup;
 			children = (
 				6A268C3E1FA7AC0D00481258 /* rgb2gray.m */,
@@ -222,8 +225,21 @@
 				6A268C391FA69C4500481258 /* extractExtrema.m */,
 				6A268C3B1FA69C5200481258 /* extractExtrema.h */,
 				6A268C3C1FA69C6F00481258 /* extractExtrema.cikernel */,
+				6A4F8ECD1FAABA1B00FEC879 /* edgeRejection.m */,
+				6A4F8ECF1FAABA2500FEC879 /* edgeRejection.h */,
+				6A4F8ED01FAABA2F00FEC879 /* edgeRejection.cikernel */,
 			);
-			path = KeypointCandidateSelection;
+			path = Detector;
+			sourceTree = "<group>";
+		};
+		6AE85BDE1FB7991600021E92 /* Descriptor */ = {
+			isa = PBXGroup;
+			children = (
+				6A1F2CCA1FBB5CD2001E069B /* magNori.m */,
+				6A1F2CCC1FBB5CE0001E069B /* magNori.h */,
+				6A1F2CCD1FBB5CF9001E069B /* magNori.cikernel */,
+			);
+			path = Descriptor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A4F8EC21FAAB84C00FEC879 /* calculateOffset.cikernel in Resources */,
+				6A1F2CCE1FBB5CF9001E069B /* magNori.cikernel in Resources */,
 				6A268C381FA6809000481258 /* difference.cikernel in Resources */,
 				6A268C421FA7AC2600481258 /* rgb2gray.cikernel in Resources */,
 				6A268BFE1FA6474C00481258 /* LaunchScreen.storyboard in Resources */,
@@ -374,6 +391,7 @@
 				6A268C331FA658D500481258 /* VC+SIFT.swift in Sources */,
 				6A268C291FA647E500481258 /* gaussian1Y.m in Sources */,
 				6A268C3F1FA7AC0D00481258 /* rgb2gray.m in Sources */,
+				6A1F2CCB1FBB5CD2001E069B /* magNori.m in Sources */,
 				6A4F8EC41FAAB88600FEC879 /* extremumLocalization.m in Sources */,
 				6A268BF61FA6474C00481258 /* ViewController.swift in Sources */,
 				6A268BF41FA6474C00481258 /* AppDelegate.swift in Sources */,

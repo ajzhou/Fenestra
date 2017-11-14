@@ -1,0 +1,33 @@
+float val(vec4 p) {
+if (p.r == 0.0 && p.g == 0.0) return 0.0;
+if (p.r != 0.0) return p.a;
+if (p.g != 0.0) return -p.g;
+
+return 0.0;
+}
+
+kernel vec4 magNori(sampler src)
+{
+    float M_PI = 3.14159265358979323846264338327950288;
+    vec2 dc = destCoord();
+
+    vec4 extent = samplerExtent(src);
+    float xl = dc.x - 1.0;
+    if (xl < extent[0]) xl = dc.x + 1.0;
+    float xh = dc.x + 1.0;
+    if (xh > (extent[0]+extent[2])) xh = dc.x - 1.0;
+    float yl = dc.y - 1.0;
+    if (yl < extent[1]) yl = dc.y + 1.0;
+    float yh = dc.y + 1.0;
+    if (yh > (extent[1]+extent[3])) yh = dc.y - 1.0;
+
+    float pxl = val(sample(src, samplerTransform(src, vec2(xl,dc.y))));
+    float pxh = val(sample(src, samplerTransform(src, vec2(xh,dc.y))));
+    float pyl = val(sample(src, samplerTransform(src, vec2(dc.x,yl))));
+    float pyh = val(sample(src, samplerTransform(src, vec2(dc.x,yh))));
+
+    float m = sqrt((pxh - pxl)*(pxh - pxl) +  (pyh - pyl)*(pyh - pyl));
+    float o = atan(pyh-pyl, pxh-xl) + M_PI;
+
+    return vec4(m, o, 0.0, 0.0);
+}

@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "butterfly")!)
+        image = CIImage(image: UIImage.init(named: "skydive")!)
 //        image = rgb2gray(inputImage: image!)
         
         // setup ImageView
@@ -95,7 +95,10 @@ class ViewController: UIViewController {
 //        image = downSampleBy2(inputImage: image!)
 //        image = downSampleBy2(inputImage: image!)
         let sigma = 4.0
-        let extrema = detectExtrema(inputImage: image!, sigma: sigma)
+        let extrema = detectKeypoints(inputImage: image!, sigma: sigma, r: 10.0)
+        
+        let test = findMagAndOri(image: image!)
+
 //        imageView.image = UIImage.init(ciImage: extrema[0])
         // ------------------------------------------------------------------------------------------------
         

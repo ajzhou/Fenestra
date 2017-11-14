@@ -35,7 +35,7 @@ static CIKernel *edgeRejectionKernel = nil;
     CGRect DOD = src.extent;
     
     return [edgeRejectionKernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
-        return CGRectInset(destRect, -2, -2);
+        return CGRectInset(destRect, -1, -1);
     } arguments: @[map, src, inputThreshold]];
 }
 

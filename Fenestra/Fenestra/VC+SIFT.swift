@@ -79,12 +79,9 @@ extension ViewController {
     }
     
     // Detect local extrema in one octave
-    func detectExtrema(inputImage: CIImage, sigma: Double)-> [CIImage]{
+    func detectKeypoints(inputImage: CIImage, sigma: Double, r: Double)-> [CIImage]{
         var extrema = [CIImage]()
-        
-        var image = rgb2gray(inputImage: inputImage)
-//        image = downSampleBy2(inputImage: image)
-//        let image = inputImage
+        let image = rgb2gray(inputImage: inputImage)
         let k = 1.41421356237 // sqrt(2)
         
         // Stack of blurred images
@@ -107,66 +104,54 @@ extension ViewController {
         comp26?.setValue(diffGauss1, forKey: "inputComparison1")
         comp26?.setValue(diffGauss3, forKey: "inputComparison2")
         comp26?.setValue(sigma * k, forKey: "inputSigma")
-        let extrema1 = comp26?.outputImage
-        extrema.append(extrema1!)
+        let extrema1 = (comp26?.outputImage)!
+        extrema.append(extrema1)
         
         // Next compare diffGauss2,3,4 | with diffGauss3 in the middle of stack
         comp26?.setValue(diffGauss3, forKey: "inputImage")
         comp26?.setValue(diffGauss2, forKey: "inputComparison1")
         comp26?.setValue(diffGauss4, forKey: "inputComparison2")
         comp26?.setValue(sigma * k * k * k, forKey: "inputSigma")
-        let extrema2 = comp26?.outputImage
-        extrema.append(extrema2!)
+        let extrema2 = (comp26?.outputImage)!
+        extrema.append(extrema2)
+        
+        // reject edges
+        let edger = CIFilter(name: "edgeRejection")
+        edger?.setValue(extrema1, forKey: "inputMap")
+        edger?.setValue(diffGauss2, forKey: "inputImage")
+        edger?.setValue(r, forKey: "inputThreshold")
+        let kp1 = (edger?.outputImage)!
+        
+        edger?.setValue(extrema2, forKey: "inputMap")
+        edger?.setValue(diffGauss3, forKey: "inputImage")
+        edger?.setValue(r, forKey: "inputThreshold") 
+        let kp2 = (edger?.outputImage)!
         
         // ImageView display
-//        imageView3.image = UIImage(ciImage: extrema1!)
-//        imageView5.image = UIImage(ciImage: extrema2!)
+        let context = CIContext()
+        imageView2.image = UIImage(cgImage: cg(image: extrema1, context: context))
+        imageView3.image = UIImage(cgImage: cg(image: extrema2, context: context))
+        imageView4.image = UIImage(cgImage: cg(image: kp1, context: context))
+        imageView5.image = UIImage(cgImage: cg(image: kp2, context: context))
+//        imageView6.image = UIImage(cgImage: cg(image: diffGauss4, context: context))
         
-        imageView2.image = UIImage(ciImage: diffGauss1)
-        imageView3.image = UIImage(ciImage: diffGauss2)
-        imageView4.image = UIImage(ciImage: diffGauss3)
-        imageView5.image = UIImage(ciImage: diffGauss4)
-        imageView6.image = UIImage(ciImage: extrema1!)
-    
-
         
-    
+        // save images to photos
+//        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: image, context: context)), nil, nil, nil)
+//        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: extrema1, context: context)), nil, nil, nil)
+        
         return extrema
     }
     
-    // Eliminate unstable keypoints
-    func eliminateUnstableKeypoints(map: CIImage, src: CIImage, hiImg: CIImage, hiHiImg: CIImage, loImg: CIImage, loLoImg: CIImage) -> CIImage {
-        // offset
-        let findOffset = CIFilter(name: "calculateOffset")
-        findOffset?.setValue(map, forKey: "inputMap")
-        findOffset?.setValue(src, forKey: "inputImage")
-        findOffset?.setValue(hiImg, forKey: "inputHigherScaleImage")
-        findOffset?.setValue(hiHiImg, forKey: "inputHigherHigherScaleImage")
-        findOffset?.setValue(loImg, forKey: "inputLowerScaleImage")
-        findOffset?.setValue(loLoImg, forKey: "inputLowerLowerScaleImage")
-        let mapWOffset = (findOffset?.outputImage)!
-        
-        // localization
-        let localizer = CIFilter(name: "extremumLocalization")
-        localizer?.setValue(mapWOffset, forKey: "inputMap")
-        localizer?.setValue(src, forKey: "inputImage")
-        localizer?.setValue(hiImg, forKey: "inputHigherScaleImage")
-        localizer?.setValue(loImg, forKey: "inputLowerScaleImage")
-        localizer?.setValue(3.2, forKey: "inputSigma")  // sigma hard coded
-        let mapLocalized = (localizer?.outputImage)!
-        
-        // rid edges
-        let edger = CIFilter(name: "edgeRejection")
-        edger?.setValue(mapLocalized, forKey: "inputMap")
-        edger?.setValue(src, forKey: "inputImage")
-        edger?.setValue(10.0, forKey: "inputThreshold") // r value hard coded
-        
-        // ImageView display
-//        imageView4.image = UIImage(ciImage: mapWOffset)
-//        imageView5.image = UIImage(ciImage: mapLocalized)
-//        imageView6.image = UIImage(ciImage: (edger?.outputImage)!)
-        
-        return (edger?.outputImage)!
+    // convert CIImage to CGImage
+    func cg(image: CIImage, context: CIContext) -> CGImage{
+        return context.createCGImage(image, from: image.extent)!
+    }
+    
+    func findMagAndOri(image: CIImage) -> CIImage{
+        let mNo = CIFilter(name: "magNori")
+        mNo?.setValue(image, forKey: "inputImage")
+        return (mNo?.outputImage)!
     }
 
 }
