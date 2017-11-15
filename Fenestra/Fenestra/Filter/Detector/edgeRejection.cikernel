@@ -48,6 +48,7 @@ kernel vec4 edgeRejection(sampler map, sampler src, float r)
     // find trace and determinant of Hessian
     float trace = Dxx + Dyy;
     float det = Dxx * Dyy - Dxy * Dxy;
+    if (det < 0.0) return BLACK;
 
     // check principal curvature ratio
     float ratio = trace * trace / det;

@@ -137,8 +137,8 @@ extension ViewController {
         
         
         // save images to photos
-//        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: image, context: context)), nil, nil, nil)
-//        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: extrema1, context: context)), nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: extrema1, context: context)), nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: extrema2, context: context)), nil, nil, nil)
         
         return extrema
     }

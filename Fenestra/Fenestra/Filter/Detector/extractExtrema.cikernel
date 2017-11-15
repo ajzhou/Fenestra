@@ -1,7 +1,7 @@
 // ExtractExtrema code for grayscale images
 kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2, float sigma)
 {
-    vec4 BLACK = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 
     vec2 dc = destCoord();
     vec4 p  = sample(src, samplerTransform(src, dc));
@@ -9,7 +9,7 @@ kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2
     if (p.r == 0.0 && p.g == 0.0) return BLACK;
 
 
-    // check max through R channel
+    // check max in R channel
     if (p.r != 0.0) {
         float sum = 0.0;
         for (int i = -1; i <= 1; i++ ) {
@@ -27,16 +27,16 @@ kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2
                 float compSelf = sample(src, samplerTransform(src, nc)).r;
                 if (i==0 && j==0) { // do not compare self at origin
                     sum = sum + comp1 + comp2;
-                    if (comp1 > p.r || comp2 > p.r) return BLACK;
+                    if (comp1 >= p.r || comp2 >= p.r) return BLACK;
                 } else {
                     sum = sum + comp1 + comp2 + compSelf;
-                    if (comp1 > p.r || comp2 > p.r || compSelf > p.r) return BLACK;
+                    if (comp1 >= p.r || comp2 >= p.r || compSelf >= p.r) return BLACK;
                 }
             }
         }
         // found max in red channel, reject low contrast
         float avg = sum / 26.0;
-        if (p.r > avg) return p;
+        if (p.r - avg > 0.01) return p;
     } else { // check max in green channel; equivalent of finding minimum
         float sum = 0.0;
         for (int i = -1; i <= 1; i++ ) {
@@ -54,16 +54,16 @@ kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2
                 float compSelf = sample(src, samplerTransform(src, nc)).g;
                 if (i==0 && j==0) { // do not compare self at origin
                     sum = sum + comp1 + comp2;
-                    if (comp1 > p.g || comp2 > p.g) return BLACK;
+                    if (comp1 >= p.g || comp2 >= p.g) return BLACK;
                 } else {
                     sum = sum + comp1 + comp2 + compSelf;
-                    if (comp1 > p.g || comp2 > p.g || compSelf > p.r) return BLACK;
+                    if (comp1 >= p.g || comp2 >= p.g || compSelf >= p.g) return BLACK;
                 }
             }
         }
         // reject low contrast
         float avg = sum / 26.0; // 26 neighbors
-        if (p.g > avg) return p;
+        if (p.g - avg > 0.01) return p;
     }
 
     return BLACK; // safe condition
