@@ -15,7 +15,6 @@
     CIImage   *inputImage;
     CIImage   *inputComparison1;
     CIImage   *inputComparison2;
-    NSNumber  *inputSigma;
 }
 
 @end

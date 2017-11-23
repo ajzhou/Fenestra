@@ -8,7 +8,7 @@ float val(vec4 p) {
 
 kernel vec4 edgeRejection(sampler map, sampler src, float r)
 {
-    vec4 BLACK = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 
     vec2 dc = destCoord();
     vec4 indicator = sample(map, samplerTransform(map, dc));

@@ -1,0 +1,11 @@
+kernel vec4 test(sampler src)
+{
+    vec2 dc = destCoord();
+    vec4 extent = samplerExtent(src);
+vec4 p = sample(src, samplerTransform(src, dc));
+if (1==1 && 2!=3) {
+    return vec4(1.0, 0.0, 0.0, 1.0);
+}
+    return vec4(0.0, 0.0, 0.0, 1.0);
+
+}

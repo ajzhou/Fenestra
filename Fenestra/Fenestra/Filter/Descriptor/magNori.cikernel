@@ -27,7 +27,8 @@ kernel vec4 magNori(sampler src)
     float pyh = val(sample(src, samplerTransform(src, vec2(dc.x,yh))));
 
     float m = sqrt((pxh - pxl)*(pxh - pxl) +  (pyh - pyl)*(pyh - pyl));
-    float o = atan(pyh-pyl, pxh-xl) + M_PI;
+    float o = atan(pyh-pyl, pxh-xl);
+    if (o < 0.0) o = o + 2*M_PI;
 
     return vec4(m, o, 0.0, 0.0);
 }

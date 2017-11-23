@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "butterfly")!)
+        image = CIImage(image: UIImage.init(named: "pixels100")!)
 //        image = rgb2gray(inputImage: image!)
         
         // setup ImageView
@@ -94,9 +94,10 @@ class ViewController: UIViewController {
         // code to test extractExtrema() ------------------------------------------------------------------
 //        image = downSampleBy2(inputImage: image!)
 //        image = downSampleBy2(inputImage: image!)
-        let sigma = 3.0
-        let extrema = detectKeypoints(inputImage: image!, sigma: sigma, r: 10.0)
-
+        
+//        let extrema = detectKeypoints(inputImage: image!, sigma: sigma, r: 10.0)
+        detectSIFT(inputImage: image!, sigma: 0.8, k: 1.4, r: 10.0, numberExtrema: 1)
+//        testKernel(image: image!)
 //        imageView.image = UIImage.init(ciImage: extrema[0])
         // ------------------------------------------------------------------------------------------------
         
@@ -113,8 +114,7 @@ class ViewController: UIViewController {
         
 //        imageView1.image = UIImage.init(ciImage: output)
 
-        print("whats up")
-        
+//        findPeakOrientation(inputKP: image!, inputMO: image!, inputSigma: 10)
     }
     
     override func didReceiveMemoryWarning() {

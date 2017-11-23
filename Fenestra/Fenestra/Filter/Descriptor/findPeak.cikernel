@@ -1,0 +1,274 @@
+float val(vec4 p) {
+    if (p.r == 0.0 && p.g == 0.0) return 0.0;
+    if (p.r != 0.0) return p.a;
+    if (p.g != 0.0) return -p.g;
+
+    return 0.0;
+}
+
+float roundNum(float x){
+    if (mod(x,1.0) < 0.5) return floor(x);
+    return ceil(x);
+}
+
+float gaussianWeight(float x, float y, float sigma){
+    const float M_PI = 3.1415926535897932384626433832795;
+    return (1.0/((2.0 * M_PI) * sigma * sigma)) * exp(-1.0 * ((x * x) + (y * y)) / (2.0 * (sigma * sigma)));
+}
+
+kernel vec4 findPeak(sampler kp, sampler mn, float sigma)
+{
+    float radius   = roundNum(3.0 * sigma);
+    float M_PI     = 3.14159265358979323846264338327950288;
+    vec4 BLACK     = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 extent    = samplerExtent(mn);
+
+    vec2 dc        = destCoord();
+    vec4 indicator = sample(kp, samplerTransform(kp, dc));
+    if (indicator.r == 0.0 && indicator.g == 0.0) return BLACK;
+
+    float bin1  = 0.0;
+    float bin2  = 0.0;
+    float bin3  = 0.0;
+    float bin4  = 0.0;
+    float bin5  = 0.0;
+    float bin6  = 0.0;
+    float bin7  = 0.0;
+    float bin8  = 0.0;
+    float bin9  = 0.0;
+    float bin10 = 0.0;
+    float bin11 = 0.0;
+    float bin12 = 0.0;
+    float bin13 = 0.0;
+    float bin14 = 0.0;
+    float bin15 = 0.0;
+    float bin16 = 0.0;
+    float bin17 = 0.0;
+    float bin18 = 0.0;
+    float bin19 = 0.0;
+    float bin20 = 0.0;
+    float bin21 = 0.0;
+    float bin22 = 0.0;
+    float bin23 = 0.0;
+    float bin24 = 0.0;
+    float bin25 = 0.0;
+    float bin26 = 0.0;
+    float bin27 = 0.0;
+    float bin28 = 0.0;
+    float bin29 = 0.0;
+    float bin30 = 0.0;
+    float bin31 = 0.0;
+    float bin32 = 0.0;
+    float bin33 = 0.0;
+    float bin34 = 0.0;
+    float bin35 = 0.0;
+    float bin36 = 0.0;
+
+    for (float x=-radius; x<=radius; x+=1.0){
+        for (float y=-radius; y<=radius; y+=1.0){
+            vec2 offset = vec2(x,y);
+            vec2 nc = dc + offset;
+            if (nc.x < extent[0] || nc.x >= extent[0]+extent[2]) {
+                offset = vec2(-x,y);
+                nc = dc + offset;
+            }
+            if (nc.y < extent[1] || nc.y >= extent[1]+extent[3]) {
+                offset = vec2(x,-y);
+                nc = dc + offset;
+            }
+
+            vec4 p  = sample(mn, samplerTransform(mn, nc));
+            float m = p[0];
+            float o = p[1];
+            float g = gaussianWeight(x, y, sigma);
+            int bin = int(floor(o / M_PI));
+
+            if (bin == 0)  bin1  = bin1  + m * g;
+            if (bin == 1)  bin2  = bin2  + m * g;
+            if (bin == 2)  bin3  = bin3  + m * g;
+            if (bin == 3)  bin4  = bin4  + m * g;
+            if (bin == 4)  bin5  = bin5  + m * g;
+            if (bin == 5)  bin6  = bin6  + m * g;
+            if (bin == 6)  bin7  = bin7  + m * g;
+            if (bin == 7)  bin8  = bin8  + m * g;
+            if (bin == 8)  bin9  = bin9  + m * g;
+            if (bin == 9)  bin10 = bin10 + m * g;
+            if (bin == 10) bin11 = bin11 + m * g;
+            if (bin == 11) bin12 = bin12 + m * g;
+            if (bin == 12) bin13 = bin13 + m * g;
+            if (bin == 13) bin14 = bin14 + m * g;
+            if (bin == 14) bin15 = bin15 + m * g;
+            if (bin == 15) bin16 = bin16 + m * g;
+            if (bin == 16) bin17 = bin17 + m * g;
+            if (bin == 17) bin18 = bin18 + m * g;
+            if (bin == 18) bin19 = bin19 + m * g;
+            if (bin == 19) bin20 = bin20 + m * g;
+            if (bin == 20) bin21 = bin21 + m * g;
+            if (bin == 21) bin22 = bin22 + m * g;
+            if (bin == 22) bin23 = bin23 + m * g;
+            if (bin == 23) bin24 = bin24 + m * g;
+            if (bin == 24) bin25 = bin25 + m * g;
+            if (bin == 25) bin26 = bin26 + m * g;
+            if (bin == 26) bin27 = bin27 + m * g;
+            if (bin == 27) bin28 = bin28 + m * g;
+            if (bin == 28) bin29 = bin29 + m * g;
+            if (bin == 29) bin30 = bin30 + m * g;
+            if (bin == 30) bin31 = bin31 + m * g;
+            if (bin == 31) bin32 = bin32 + m * g;
+            if (bin == 32) bin33 = bin33 + m * g;
+            if (bin == 33) bin34 = bin34 + m * g;
+            if (bin == 34) bin35 = bin35 + m * g;
+            if (bin == 35) bin36 = bin36 + m * g;
+        }
+    }
+
+    float max = -1.0;
+    int peak = 10;
+
+    if (bin1 > max) {
+        max = bin1;
+        peak = 10;
+    }
+    if (bin2 > max) {
+        max = bin2;
+        peak = 20;
+    }
+    if (bin3 > max) {
+        max = bin3;
+        peak = 30;
+    }
+    if (bin4 > max) {
+        max = bin4;
+        peak = 40;
+    }
+    if (bin5 > max) {
+    max = bin5;
+    peak = 50;
+    }
+    if (bin6 > max) {
+    max = bin6;
+    peak = 60;
+    }
+    if (bin7 > max) {
+    max = bin7;
+    peak = 70;
+    }
+    if (bin8 > max) {
+    max = bin8;
+    peak = 80;
+    }
+    if (bin9 > max) {
+    max = bin9;
+    peak = 90;
+    }
+    if (bin10 > max) {
+    max = bin10;
+    peak = 100;
+    }
+    if (bin11 > max) {
+    max = bin11;
+    peak = 110;
+    }
+    if (bin12 > max) {
+    max = bin12;
+    peak = 120;
+    }
+    if (bin13 > max) {
+    max = bin13;
+    peak = 130;
+    }
+    if (bin14 > max) {
+    max = bin14;
+    peak = 140;
+    }
+    if (bin15 > max) {
+    max = bin15;
+    peak = 150;
+    }
+    if (bin16 > max) {
+    max = bin16;
+    peak = 160;
+    }
+    if (bin17 > max) {
+    max = bin17;
+    peak = 170;
+    }
+    if (bin18 > max) {
+    max = bin18;
+    peak = 180;
+    }
+    if (bin19 > max) {
+    max = bin19;
+    peak = 190;
+    }
+    if (bin20 > max) {
+    max = bin20;
+    peak = 200;
+    }
+    if (bin21 > max) {
+    max = bin21;
+    peak = 210;
+    }
+    if (bin22 > max) {
+    max = bin22;
+    peak = 220;
+    }
+    if (bin23 > max) {
+    max = bin23;
+    peak = 230;
+    }
+    if (bin24 > max) {
+    max = bin24;
+    peak = 240;
+    }
+    if (bin25 > max) {
+    max = bin25;
+    peak = 250;
+    }
+    if (bin26 > max) {
+    max = bin26;
+    peak = 260;
+    }
+    if (bin27 > max) {
+    max = bin27;
+    peak = 270;
+    }
+    if (bin28 > max) {
+    max = bin28;
+    peak = 280;
+    }
+    if (bin29 > max) {
+    max = bin29;
+    peak = 290;
+    }
+    if (bin30 > max) {
+    max = bin30;
+    peak = 300;
+    }
+    if (bin31 > max) {
+    max = bin31;
+    peak = 310;
+    }
+    if (bin32 > max) {
+    max = bin32;
+    peak = 320;
+    }
+    if (bin33 > max) {
+    max = bin33;
+    peak = 330;
+    }
+    if (bin34 > max) {
+    max = bin34;
+    peak = 340;
+    }
+    if (bin35 > max) {
+    max = bin35;
+    peak = 350;
+    }
+    if (bin36 > max) {
+    max = bin36;
+    peak = 360;
+    }
+
+    return vec4(float(peak) / 360.0 * 2.0 * M_PI, 0.0, 0.0, 0.0);
+}
