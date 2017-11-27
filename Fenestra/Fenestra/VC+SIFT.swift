@@ -59,6 +59,8 @@ extension ViewController {
         var extrema = [CIImage]()
         let image = rgb2gray(inputImage: inputImage)
         let k = 1.41421356237 // sqrt(2)
+//        let k = 2.0
+        
         
         // Stack of blurred images
         let blurredImage1 = gaussianBlur(inputImage: image, sigma: sigma)
@@ -66,12 +68,18 @@ extension ViewController {
         let blurredImage3 = gaussianBlur(inputImage: image, sigma: sigma * k * k)
         let blurredImage4 = gaussianBlur(inputImage: image, sigma: sigma * k * k * k)
         let blurredImage5 = gaussianBlur(inputImage: image, sigma: sigma * k * k * k * k)
+        let blurredImage6 = gaussianBlur(inputImage: image, sigma: sigma * k * k * k * k * k)
+        let blurredImage7 = gaussianBlur(inputImage: image, sigma: sigma * k * k * k * k * k * k)
+        let blurredImage8 = gaussianBlur(inputImage: image, sigma: sigma * k * k * k * k * k * k * k)
         
         // Stack of Difference of Gaussian images
         let diffGauss1 = diffOfGaussian(inputImageLo: blurredImage1, inputImageHi: blurredImage2)
         let diffGauss2 = diffOfGaussian(inputImageLo: blurredImage2, inputImageHi: blurredImage3)
         let diffGauss3 = diffOfGaussian(inputImageLo: blurredImage3, inputImageHi: blurredImage4)
         let diffGauss4 = diffOfGaussian(inputImageLo: blurredImage4, inputImageHi: blurredImage5)
+        let diffGauss5 = diffOfGaussian(inputImageLo: blurredImage5, inputImageHi: blurredImage6)
+        let diffGauss6 = diffOfGaussian(inputImageLo: blurredImage6, inputImageHi: blurredImage7)
+        let diffGauss7 = diffOfGaussian(inputImageLo: blurredImage7, inputImageHi: blurredImage8)
         
         // Extrema extraction through comparison of 26(9+8+9) neighbors
         let comp26 = CIFilter(name: "extractExtrema")
@@ -80,39 +88,61 @@ extension ViewController {
         comp26?.setValue(diffGauss1, forKey: "inputComparison1")
         comp26?.setValue(diffGauss3, forKey: "inputComparison2")
         let extrema1 = (comp26?.outputImage)!
-        extrema.append(extrema1)
+      
         
         // Next compare diffGauss2,3,4 | with diffGauss3 in the middle of stack
         comp26?.setValue(diffGauss3, forKey: "inputImage")
         comp26?.setValue(diffGauss2, forKey: "inputComparison1")
         comp26?.setValue(diffGauss4, forKey: "inputComparison2")
         let extrema2 = (comp26?.outputImage)!
-        extrema.append(extrema2)
+        
+        comp26?.setValue(diffGauss4, forKey: "inputImage")
+        comp26?.setValue(diffGauss3, forKey: "inputComparison1")
+        comp26?.setValue(diffGauss5, forKey: "inputComparison2")
+        let extrema3 = (comp26?.outputImage)!
+        
+        comp26?.setValue(diffGauss5, forKey: "inputImage")
+        comp26?.setValue(diffGauss4, forKey: "inputComparison1")
+        comp26?.setValue(diffGauss6, forKey: "inputComparison2")
+        let extrema4 = (comp26?.outputImage)!
+        
+        comp26?.setValue(diffGauss6, forKey: "inputImage")
+        comp26?.setValue(diffGauss5, forKey: "inputComparison1")
+        comp26?.setValue(diffGauss7, forKey: "inputComparison2")
+        let extrema5 = (comp26?.outputImage)!
+       
         
         // reject edges
-        let edger = CIFilter(name: "edgeRejection")
-        edger?.setValue(extrema1, forKey: "inputMap")
-        edger?.setValue(diffGauss2, forKey: "inputImage")
-        edger?.setValue(r, forKey: "inputThreshold")
-        let kp1 = (edger?.outputImage)!
-        
-        edger?.setValue(extrema2, forKey: "inputMap")
-        edger?.setValue(diffGauss3, forKey: "inputImage")
-        edger?.setValue(r, forKey: "inputThreshold") 
-        let kp2 = (edger?.outputImage)!
-        
+//        let edger = CIFilter(name: "edgeRejection")
+//        edger?.setValue(extrema1, forKey: "inputMap")
+//        edger?.setValue(diffGauss2, forKey: "inputImage")
+//        edger?.setValue(r, forKey: "inputThreshold")
+//        let kp1 = (edger?.outputImage)!
+//
+//        edger?.setValue(extrema2, forKey: "inputMap")
+//        edger?.setValue(diffGauss3, forKey: "inputImage")
+//        edger?.setValue(r, forKey: "inputThreshold")
+//        let kp2 = (edger?.outputImage)!
+
         // ImageView display
         let context = CIContext()
-        imageView2.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss3, context: context))
-        imageView3.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss4, context: context))
-        imageView4.image = UIImage(cgImage: convertCIImagetoCGImage(image: kp1, context: context))
-        imageView5.image = UIImage(cgImage: convertCIImagetoCGImage(image: kp2, context: context))
+        saveAsPNG(image: extrema1, context: context)
+        saveAsPNG(image: extrema2, context: context)
+        saveAsPNG(image: extrema3, context: context)
+//        saveAsPNG(image: extrema4, context: context)
+//        saveAsPNG(image: extrema5, context: context)
+//
+        imageView3.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss1, context: context))
+        imageView4.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss2, context: context))
+        imageView5.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss3, context: context))
+        imageView6.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss4, context: context))
 //        imageView6.image = UIImage(cgImage: cg(image: diffGauss4, context: context))
         
-        
-        // save images to photos
-//        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: extrema1, context: context)), nil, nil, nil)
-//        UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: cg(image: extrema2, context: context)), nil, nil, nil)
+//        saveAsPNG(image: diffGauss1, context: context)
+//        saveAsPNG(image: diffGauss2, context: context)
+//        saveAsPNG(image: diffGauss3, context: context)
+//        saveAsPNG(image: diffGauss4, context: context)
+//        saveAsPNG(image: diffGauss5, context: context)
         
         return extrema
     }
@@ -132,7 +162,8 @@ extension ViewController {
         edger?.setValue(r, forKey: "inputThreshold")
         let kp = (edger?.outputImage)!
         
-        return kp
+//        return kp
+        return ex
     }
     
     func detectSIFT(inputImage: CIImage, sigma: Double, k: Double, r: Double, numberExtrema: Int) {
@@ -166,16 +197,16 @@ extension ViewController {
         // display
         let context = CIContext()
 //        imageView2.image = UIImage(cgImage: cg(image: keypoints[0], context: context))
-        imageView3.image = UIImage(cgImage: convertCIImagetoCGImage(image: keypoints[0], context: context))
-//        imageView4.image = UIImage(cgImage: convertCIImagetoCGImage(image: keypoints[1], context: context))
+        imageView3.image = UIImage(cgImage: convertCIImagetoCGImage(image: lastDiff1, context: context))
+        imageView4.image = UIImage(cgImage: convertCIImagetoCGImage(image: lastDiff2, context: context))
 //        imageView5.image = UIImage(cgImage: convertCIImagetoCGImage(image: keypoints[2], context: context))
 //        imageView6.image = UIImage(cgImage: convertCIImagetoCGImage(image: keypoints[3], context: context))
         
         // saving photos to images
-//        for i in 0...3 {
-            saveAsPNG(image: keypoints[0], context: context)
-//        }
-       
+        for i in 0...numberExtrema-1 {
+            saveAsPNG(image: keypoints[i], context: context)
+        }
+    
         
 //        // Gaussian Blur
 //        var blurred = [CIImage]()

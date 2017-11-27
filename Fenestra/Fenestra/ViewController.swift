@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "pixels100")!)
+        image = CIImage(image: UIImage.init(named: "skydive")!)
 //        image = rgb2gray(inputImage: image!)
         
         // setup ImageView
@@ -61,7 +61,8 @@ class ViewController: UIViewController {
         setupTap()
         
         // Display Original Image
-        imageView1.image =  UIImage(ciImage: rgb2gray(inputImage:image!))
+//        imageView1.image =  UIImage(ciImage: rgb2gray(inputImage:image!))
+        imageView1.image = UIImage(named: "pixels100")
     
     }
     
@@ -71,8 +72,8 @@ class ViewController: UIViewController {
     
     @objc func handleTap() {
         // code to test rgb2gray() ------------------------------------------------------------------------
-//                let output = rgb2gray(inputImage: image!)
-//                imageView.image = UIImage.init(ciImage: output)
+                let output = rgb2gray(inputImage: image!)
+                imageView2.image = UIImage.init(ciImage: output)
         // ------------------------------------------------------------------------------------------------
         
         // code to test gaussianBlur() --------------------------------------------------------------------
@@ -95,8 +96,8 @@ class ViewController: UIViewController {
 //        image = downSampleBy2(inputImage: image!)
 //        image = downSampleBy2(inputImage: image!)
         
-//        let extrema = detectKeypoints(inputImage: image!, sigma: sigma, r: 10.0)
-        detectSIFT(inputImage: image!, sigma: 0.8, k: 1.4, r: 10.0, numberExtrema: 1)
+//        let extrema = detectKeypoints(inputImage: image!, sigma: 1.4, r: 10.0)
+        detectSIFT(inputImage: image!, sigma: 8.0, k: sqrt(2.0), r: 10.0, numberExtrema: 5)
 //        testKernel(image: image!)
 //        imageView.image = UIImage.init(ciImage: extrema[0])
         // ------------------------------------------------------------------------------------------------

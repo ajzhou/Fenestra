@@ -1,4 +1,5 @@
 float roundNum(float x){
+    if (x < 1.0) return 1.0;
     if (mod(x,1.0) < 0.5) return floor(x);
     return ceil(x);
 }
@@ -8,7 +9,7 @@ float kernelSum(float sigma, float radius)
     float M_PI = 3.1415926535897932384626433832795;
     float sum = 0.0;
     for (float x=-radius; x<=radius; x+=1.0){
-    sum += (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (x * x) / (2.0 * (sigma * sigma)));
+        sum += (1.0/(sqrt(2.0 * M_PI) * sigma)) * exp(-1.0 * (x * x) / (2.0 * (sigma * sigma)));
     }
     return sum;
 }
@@ -26,7 +27,7 @@ kernel vec4 gaussian1X(sampler image,float sigma,float width,float origin)
     vec2 dc = destCoord();
 
     for (float x=-radius; x<=radius; x+=1.0){
-        float g = gaussian1D(x,sigma, sum);
+        float g = gaussian1D(x, sigma, sum);
         vec2 offset = vec2(x,0);
         vec2 tp = dc + offset;
         if (tp.x < origin || tp.x >= width+origin) {
