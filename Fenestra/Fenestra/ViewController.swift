@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "skydive")!)
+        image = CIImage(image: UIImage.init(named: "butterfly")!)
 //        image = rgb2gray(inputImage: image!)
         
         // setup ImageView
@@ -51,18 +51,12 @@ class ViewController: UIViewController {
         imageView5.contentMode = .scaleAspectFit
         imageView6.contentMode = .scaleAspectFit
         
-        //        imageView2.backgroundColor = UIColor.blue
-        //        imageView3.backgroundColor = UIColor.red
-        //        imageView4.backgroundColor = UIColor.yellow
-        //        imageView5.backgroundColor = UIColor.green
-        //        imageView6.backgroundColor = UIColor.cyan
-        
         // setup Tap
         setupTap()
         
         // Display Original Image
 //        imageView1.image =  UIImage(ciImage: rgb2gray(inputImage:image!))
-        imageView1.image = UIImage(named: "pixels100")
+        imageView1.image = UIImage(ciImage: image!)
     
     }
     
@@ -71,36 +65,19 @@ class ViewController: UIViewController {
     }
     
     @objc func handleTap() {
-        // code to test rgb2gray() ------------------------------------------------------------------------
-                let output = rgb2gray(inputImage: image!)
-                imageView2.image = UIImage.init(ciImage: output)
-        // ------------------------------------------------------------------------------------------------
+        let context = CIContext()
+        let kps = detectSIFT(inputImage: image!, sigma: 1.0, r: 10.0, numberOctave: 5)
+        let kp  = convertCIImagetoCGImage(image: kps[0], context: context)
+        saveAsPNG(image: kps[0], context: context)
+        let locations = getKeypointLocationsFromImage(fromImage: kp)
+        let locImg = drawLocationImage(locations: locations)
+        print("------------------------")
+        print(locations)
+        let res = getKeypointLocationsFromImage(fromImage: convertCIImagetoCGImage(image: locImg, context: context))
+//        saveAsPNG(image: locImg, context: context)
         
-        // code to test gaussianBlur() --------------------------------------------------------------------
-//        image = gaussianBlur(inputImage: image!, sigma: 30.0)
-//
-//
-//        // Display new image on imageView
-//        imageView.image = UIImage(ciImage: image!)
-        // ------------------------------------------------------------------------------------------------
-        
-        // code to test diffOfGaussian() ------------------------------------------------------------------
-//        let imageLo = gaussianBlur(inputImage: rgb2gray(inputImage: image!), sigma: 1.0)
-//        let imageHi = gaussianBlur(inputImage: rgb2gray(inputImage: image!), sigma: 1.4)
-//        let output = diffOfGaussian(inputImageLo: imageLo, inputImageHi: imageHi)
-//
-//        imageView.image = UIImage.init(ciImage: output)
-        // ------------------------------------------------------------------------------------------------
-        
-        // code to test extractExtrema() ------------------------------------------------------------------
-//        image = downSampleBy2(inputImage: image!)
-//        image = downSampleBy2(inputImage: image!)
-        
-//        let extrema = detectKeypoints(inputImage: image!, sigma: 1.4, r: 10.0)
-        detectSIFT(inputImage: image!, sigma: 8.0, k: sqrt(2.0), r: 10.0, numberExtrema: 5)
-//        testKernel(image: image!)
-//        imageView.image = UIImage.init(ciImage: extrema[0])
-        // ------------------------------------------------------------------------------------------------
+//        detectSIFTtest(inputImage: image!, sigma: 0.5, k: sqrt(2), r: 10.0, numberExtrema: 10)
+// ------------------------------------------------------------------------------------------------
         
 //        let k = 1.41421356237 // sqrt(2)
 //        
@@ -116,6 +93,8 @@ class ViewController: UIViewController {
 //        imageView1.image = UIImage.init(ciImage: output)
 
 //        findPeakOrientation(inputKP: image!, inputMO: image!, inputSigma: 10)
+        
+//        let test = testKernel(image: image!)
     }
     
     override func didReceiveMemoryWarning() {

@@ -35,7 +35,7 @@ kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2
         }
         // found max in red channel, reject low contrast
         float avg = sum / 26.0;
-        if (p.r - avg > 0.0 && p.r > 0.2) return p;
+        if (p.r - avg > 0.01 && p.r > 0.1) return p;
     } else { // check max in green channel; equivalent of finding minimum
         float sum = 0.0;
         for (int i = -1; i <= 1; i++ ) {
@@ -62,7 +62,7 @@ kernel vec4 extractExtrema(sampler src, sampler comparison1, sampler comparison2
         }
         // reject low contrast
         float avg = sum / 26.0; // 26 neighbors
-        if (p.g - avg > 0.0 && p.g > 0.2) return p;
+        if (p.g - avg > 0.01 && p.g > 0.1) return p;
     }
 
     return BLACK; // safe condition

@@ -1,0 +1,38 @@
+float roundNum(float x){
+    if (mod(x,1.0) < 0.5) return floor(x);
+    return ceil(x);
+}
+
+kernel vec4 descriptor(sampler locImg, sampler mn, int length)
+{
+    float M_PI                = 3.14159265358979323846264338327950288;
+    float ROTATED_GRID_LENGTH = 32.0;
+    float HIST_SIZE           = 8.0;
+    float MAX_MULTIPLE        = 50.0;
+    float PALETTE             = 255.0;
+
+    vec4 BLACK                = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 extent               = samplerExtent(mn);
+    vec2 dc                   = destCoord();
+
+    // get keypoint location from locImg
+    vec4 location = sample(locImg, samplerTransform(locImg, vec2(0.0,dc.y)));
+    location = unpremultiply(location);
+    float x = roundNum(location.r * MAX_MULTIPLE) * PALETTE + location.g * PALETTE;
+    x = roundNum(x);
+    float y = roundNum(location.b * MAX_MULTIPLE) * PALETTE + location.a * PALETTE;
+    y = roundNum(y);
+
+    // bx, by, histogram index
+    float bx = floor(mod(x, ROTATED_GRID_LENGTH) / HIST_SIZE) - 2.0;
+    float by = floor(x / ROTATED_GRID_LENGTH) - 2.0;
+    float hist_index = mod(x, 8);
+
+    for (i=0.0; i<=3.0; i+=1.0){
+        for (j=0.0; j<=3.0; j+=1.0){
+            float u = 4.0 * bx + i;
+            float v = 4.0 * by + j;
+        }
+    }
+
+}

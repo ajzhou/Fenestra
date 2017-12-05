@@ -33,7 +33,7 @@ kernel vec4 edgeRejection(sampler map, sampler src, float r)
     float yh = dc.y + 1.0;
     if (yh > (extent[1]+extent[3])) yh = dc.y - 1.0;
     vec4 pyl = sample(src, samplerTransform(src, vec2(dc.x,yl)));
-    vec4 pyh = sample(src, samplerTransform(src, vec2(dc.y,yh)));
+    vec4 pyh = sample(src, samplerTransform(src, vec2(dc.x,yh)));
 
     float Dyy = val(pyl) - (2.0 * val(p)) + val(pyh);
 
@@ -43,7 +43,7 @@ kernel vec4 edgeRejection(sampler map, sampler src, float r)
     vec4 phh = sample(src, samplerTransform(src, vec2(xh,yh)));
     vec4 phl = sample(src, samplerTransform(src, vec2(xh,yl)));
 
-    float Dxy = (-val(plh) + val(phh) - val(pll) + val(phl)) / 4.0;
+    float Dxy = (-val(plh) + val(phh) + val(pll) - val(phl)) / 4.0;
 
     // find trace and determinant of Hessian
     float trace = Dxx + Dyy;

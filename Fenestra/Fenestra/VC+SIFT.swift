@@ -61,7 +61,6 @@ extension ViewController {
         let k = 1.41421356237 // sqrt(2)
 //        let k = 2.0
         
-        
         // Stack of blurred images
         let blurredImage1 = gaussianBlur(inputImage: image, sigma: sigma)
         let blurredImage2 = gaussianBlur(inputImage: image, sigma: sigma * k)
@@ -154,19 +153,20 @@ extension ViewController {
         comp26?.setValue(diffTarget, forKey: "inputImage")
         comp26?.setValue(diffLo, forKey: "inputComparison1")
         comp26?.setValue(diffHi, forKey: "inputComparison2")
-    
         let ex = (comp26?.outputImage)!
+        
         let edger = CIFilter(name: "edgeRejection")
         edger?.setValue(ex, forKey: "inputMap")
         edger?.setValue(diffTarget, forKey: "inputImage")
         edger?.setValue(r, forKey: "inputThreshold")
         let kp = (edger?.outputImage)!
         
-//        return kp
-        return ex
+        // Hessian 
+//        return ex
+        return kp
     }
     
-    func detectSIFT(inputImage: CIImage, sigma: Double, k: Double, r: Double, numberExtrema: Int) {
+    func detectSIFTtest(inputImage: CIImage, sigma: Double, k: Double, r: Double, numberExtrema: Int)  {
         let image = rgb2gray(inputImage: inputImage)
 //        let k = 1.41421356237 // sqrt(2)
         
@@ -203,31 +203,68 @@ extension ViewController {
 //        imageView6.image = UIImage(cgImage: convertCIImagetoCGImage(image: keypoints[3], context: context))
         
         // saving photos to images
+        var count = 0;
         for i in 0...numberExtrema-1 {
             saveAsPNG(image: keypoints[i], context: context)
+            count+=1
+            if count == 5 {
+                sleep(1)
+                count = 0
+            }
+            
         }
+    }
     
+    func detectSIFT(inputImage: CIImage, sigma: Double, r: Double, numberOctave: Int)-> [CIImage] {
+        let context = CIContext()
         
-//        // Gaussian Blur
-//        var blurred = [CIImage]()
-//        for i in 1...(numberExtrema+3){
-//            let blur = gaussianBlur(inputImage: inputImage, sigma: sigma * pow(k, Double(i-1)))
-//            blurred.append(blur)
-//        }
-//
-//        // Difference of Gaussian
-//        var diff = [CIImage]()
-//        for i in 0...(blurred.count-2){
-//            let b1 = blurred[i];
-//            let b2 = blurred[i+1];
-//            let d  = diffOfGaussian(inputImageLo: b1, inputImageHi: b2)
-//            diff.append(d)
-//        }
-////        print(blurred)
-////        let blurredImage1 = gaussianBlur(inputImage: blurred[1], sigma: blurred[2])
-////        let blurredImage2 = gaussianBlur(inputImage: image, sigma: sigma * k)
-//        let diffGauss1 = diffOfGaussian(inputImageLo: blurred[6], inputImageHi: blurred[7])
+        var image     = rgb2gray(inputImage: inputImage)
+        var s         = sigma
+        let k         = 1.41421356237
+        var keypoints = [CIImage]()
+
         
+        for i in 1...numberOctave {
+            if (i>1) {
+                image = downSampleBy2(inputImage: image)
+                s     = 2.0 * s
+            }
+            
+            // initialization
+            let blurredImage1 = gaussianBlur(inputImage: image, sigma: s)
+            let blurredImage2 = gaussianBlur(inputImage: image, sigma: s * k)
+            let blurredImage3 = gaussianBlur(inputImage: image, sigma: s * k * k)
+            let blurredImage4 = gaussianBlur(inputImage: image, sigma: s * k * k * k)
+            let blurredImage5 = gaussianBlur(inputImage: image, sigma: s * k * k * k * k)
+            let diffGauss1 = diffOfGaussian(inputImageLo: blurredImage1, inputImageHi: blurredImage2)
+            let diffGauss2 = diffOfGaussian(inputImageLo: blurredImage2, inputImageHi: blurredImage3)
+            let diffGauss3 = diffOfGaussian(inputImageLo: blurredImage3, inputImageHi: blurredImage4)
+            let diffGauss4 = diffOfGaussian(inputImageLo: blurredImage4, inputImageHi: blurredImage5)
+            
+            imageView3.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss1, context: context))
+            imageView4.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss2, context: context))
+            imageView5.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss3, context: context))
+            imageView6.image = UIImage(cgImage: convertCIImagetoCGImage(image: diffGauss4, context: context))
+            
+            // extract and append
+            let kp1 = extractExtrema(diffLo: diffGauss1, diffTarget: diffGauss2, diffHi: diffGauss3, r: r)
+            let kp2 = extractExtrema(diffLo: diffGauss2, diffTarget: diffGauss3, diffHi: diffGauss4, r: r)
+            keypoints.append(kp1)
+            keypoints.append(kp2)
+        }
+
+        // testing
+//        var count = 0
+//        for i in 0...keypoints.count-1 {
+//            saveAsPNG(image: keypoints[i], context: context)
+//            count+=1
+//            if count == 5 {
+//                sleep(1)
+//                count = 0
+//            }
+//        }
+        
+        return keypoints
     }
   
     
