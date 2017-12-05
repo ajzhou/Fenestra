@@ -40,7 +40,7 @@ static CIKernel *kernel = nil;
         } else {
             return mn.extent;
         }
-    } arguments: @[locImg,mn,inputLength]];
+    } arguments: @[locImg,mn,inputLength,inputSigma]];
 }
 
 // registration

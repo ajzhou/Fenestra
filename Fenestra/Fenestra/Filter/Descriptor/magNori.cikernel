@@ -8,17 +8,19 @@ return 0.0;
 
 kernel vec4 magNori(sampler src)
 {
-    float M_PI = 3.14159265358979323846264338327950288;
-    vec2 dc = destCoord();
+    float M_PI         = 3.14159265358979323846264338327950288;
+    float MAX_MULTIPLE = 50.0;
+    float PALETTE      = 255.0;
+    vec2 dc            = destCoord();
 
     vec4 extent = samplerExtent(src);
-    float xl = dc.x - 1.0;
+    float xl               = dc.x - 1.0;
     if (xl < extent[0]) xl = dc.x + 1.0;
-    float xh = dc.x + 1.0;
+    float xh               = dc.x + 1.0;
     if (xh > (extent[0]+extent[2])) xh = dc.x - 1.0;
-    float yl = dc.y - 1.0;
+    float yl               = dc.y - 1.0;
     if (yl < extent[1]) yl = dc.y + 1.0;
-    float yh = dc.y + 1.0;
+    float yh               = dc.y + 1.0;
     if (yh > (extent[1]+extent[3])) yh = dc.y - 1.0;
 
     float pxl = val(sample(src, samplerTransform(src, vec2(xl,dc.y))));
@@ -26,9 +28,15 @@ kernel vec4 magNori(sampler src)
     float pyl = val(sample(src, samplerTransform(src, vec2(dc.x,yl))));
     float pyh = val(sample(src, samplerTransform(src, vec2(dc.x,yh))));
 
-    float m = sqrt((pxh - pxl)*(pxh - pxl) +  (pyh - pyl)*(pyh - pyl));
-    float o = atan(pyh-pyl, pxh-xl);
+    // calulate magnitude and orientation
+    float m        = sqrt((pxh - pxl)*(pxh - pxl) +  (pyh - pyl)*(pyh - pyl));
+    float o        = atan(pyh-pyl, pxh-xl);
     if (o < 0.0) o = o + 2*M_PI;
+    o              = o / (2 * M_PI);
 
-    return vec4(m, o, 0.0, 0.0);
+    // represent m with r and g channels
+    float r = floor(m / PALETTE) / MAX_MULTIPLE;
+    float g = mod(m, PALETTE) / PALETTE;
+
+    return vec4(r, g, o, 1.0);
 }

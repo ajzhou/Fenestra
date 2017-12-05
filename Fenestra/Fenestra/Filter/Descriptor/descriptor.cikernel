@@ -3,7 +3,7 @@ float roundNum(float x){
     return ceil(x);
 }
 
-kernel vec4 descriptor(sampler locImg, sampler mn, int length)
+kernel vec4 descriptor(sampler locImg, sampler mn, float length, float s)
 {
     float M_PI                = 3.14159265358979323846264338327950288;
     float ROTATED_GRID_LENGTH = 32.0;
@@ -14,25 +14,50 @@ kernel vec4 descriptor(sampler locImg, sampler mn, int length)
     vec4 BLACK                = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 extent               = samplerExtent(mn);
     vec2 dc                   = destCoord();
+    float bin                 = 0.0;
 
-    // get keypoint location from locImg
+    // get keypoint imformation from locImg
     vec4 location = sample(locImg, samplerTransform(locImg, vec2(0.0,dc.y)));
-    location = unpremultiply(location);
-    float x = roundNum(location.r * MAX_MULTIPLE) * PALETTE + location.g * PALETTE;
-    x = roundNum(x);
-    float y = roundNum(location.b * MAX_MULTIPLE) * PALETTE + location.a * PALETTE;
-    y = roundNum(y);
+    location      = unpremultiply(location);
+    float kx      = roundNum(location.r * MAX_MULTIPLE) * PALETTE + location.g * PALETTE;
+    kx            = roundNum(kx);
+    float ky      = roundNum(location.b * MAX_MULTIPLE) * PALETTE + location.a * PALETTE;
+    ky            = roundNum(ky);
+    float ko      = sample(mn, samplerTransform(mn, vec2(kx,ky))).b;
+    ko            = ko * 2 * M_PI;
+    
 
     // bx, by, histogram index
-    float bx = floor(mod(x, ROTATED_GRID_LENGTH) / HIST_SIZE) - 2.0;
-    float by = floor(x / ROTATED_GRID_LENGTH) - 2.0;
-    float hist_index = mod(x, 8);
+    float bx         = floor(mod(kx, ROTATED_GRID_LENGTH) / HIST_SIZE) - 2.0;
+    float by         = floor(kx / ROTATED_GRID_LENGTH) - 2.0;
+    float hist_index = mod(kx, 8.0);
+    float ho         = (hist_index/HIST_SIZE) * (2*M_PI);
 
     for (i=0.0; i<=3.0; i+=1.0){
         for (j=0.0; j<=3.0; j+=1.0){
+            // rotated grid coordinates
             float u = 4.0 * bx + i;
             float v = 4.0 * by + j;
+
+            // scale image coordinates
+            float x = kx + s/16.0 * (u * cos(ko) - v * sin(ko));
+            float y = ky + s/16.0 * (u * sin(ko) + v * cos(ko));
+
+            // gradient information
+            vec4 gradient = sample(mn, samplerTransform(mn, vec2(x,y)));
+            float gm      = roundNum(gradient.r * MAX_MULTIPLE) * PALETTE + gradient.g * PALETTE;
+            float go      = gradient.b;
+            go            = go * (2*M_PI) - ko;
+
+            // check if belongs to histogram bin
+            if (abs(go - ho) < (M_PI*0.25)) {
+                bin = bin + go * gm;
+            }
         }
     }
 
+    float r = floor(bin / PALETTE) / MAX_MULTIPLE;
+    float g = mod(bin, PALETTE) / PALETTE;
+
+    return vec4(r, g, 0.0, 1.0);
 }

@@ -14,6 +14,8 @@
     CIImage   *inputLocations;
     CIImage   *inputMagOri;
     NSNumber  *inputLength;
+    NSNumber  *inputSigma;
+
 }
 
 @end
