@@ -31,16 +31,16 @@ static CIKernel *kernel = nil;
 - (CIImage *)outputImage
 {
     CISampler * locImg = [CISampler samplerWithImage: inputLocations];
+    CISampler * peak = [CISampler samplerWithImage: inputPeak];
     CISampler * mn = [CISampler samplerWithImage: inputMagOri];
     CGRect DOD = CGRectMake(0.0, 0.0, 128.0, inputLength.doubleValue);
-    
     return [kernel applyWithExtent:DOD roiCallback:^CGRect(int index, CGRect destRect) {
         if (index == 0) {
             return CGRectMake(0.0, destRect.origin.y, 1.0, destRect.size.height);
         } else {
             return mn.extent;
         }
-    } arguments: @[locImg,mn,inputLength,inputSigma]];
+    } arguments: @[locImg,peak,mn,inputLength,inputSigma]];
 }
 
 // registration

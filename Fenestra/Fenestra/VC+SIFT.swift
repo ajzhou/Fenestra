@@ -281,5 +281,15 @@ extension ViewController {
         peakFinder?.setValue(inputSigma, forKey: "inputSigma")
         return (peakFinder?.outputImage)!
     }
+    
+    func runSIFTDescriptor(inputKPLocations: CIImage, inputPeak: CIImage, inputMagOri: CIImage, length: Double, sigma: Double) -> CIImage {
+        let descriptor = CIFilter(name: "descriptor")
+        descriptor?.setValue(inputKPLocations, forKey: "inputLocations")
+        descriptor?.setValue(inputPeak, forKey: "inputPeak")
+        descriptor?.setValue(inputMagOri, forKey: "inputMagOri")
+        descriptor?.setValue(length, forKey: "inputLength")
+        descriptor?.setValue(sigma, forKey: "inputSigma")
+        return (descriptor?.outputImage)!
+    }
 
 }

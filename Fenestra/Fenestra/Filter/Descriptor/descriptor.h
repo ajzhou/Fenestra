@@ -12,6 +12,7 @@
 @interface descriptor: CIFilter
 {
     CIImage   *inputLocations;
+    CIImage   *inputPeak;
     CIImage   *inputMagOri;
     NSNumber  *inputLength;
     NSNumber  *inputSigma;

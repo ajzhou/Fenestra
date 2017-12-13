@@ -4,11 +4,8 @@ kernel vec4 test(sampler src)
     vec4 extent = samplerExtent(src);
     vec4 p = sample(src, samplerTransform(src, dc));
 
-float loc[10];
-loc[1] = 2.0;
 
 
-
-    return vec4(loc[1]/255.0, 0.0, 0.0, 1.0);
+    return vec4(float(300 >> 4)/ 20.0, 0.1, 0.0, 1.0);
 
 }

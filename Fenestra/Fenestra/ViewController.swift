@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // initialize image
-        image = CIImage(image: UIImage.init(named: "butterfly")!)
+        image = CIImage(image: UIImage(named: "gradient_bl_tr")!)
 //        image = rgb2gray(inputImage: image!)
         
         // setup ImageView
@@ -55,7 +55,6 @@ class ViewController: UIViewController {
         setupTap()
         
         // Display Original Image
-//        imageView1.image =  UIImage(ciImage: rgb2gray(inputImage:image!))
         imageView1.image = UIImage(ciImage: image!)
     
     }
@@ -65,36 +64,60 @@ class ViewController: UIViewController {
     }
     
     @objc func handleTap() {
+//        let im1 = UIImage(named: "gradient_horizontal")
+//        let im2 = UIImage(named: "gradient_bl_tr")
+//        let im3 = UIImage(named: "gradient_br_tl")
+//        let im4 = UIImage(named: "gradient_tr_bl")
+//
+//        let gr1 = rgb2gray(inputImage: CIImage(image: im1!)!)
+//        let gr2 = rgb2gray(inputImage: CIImage(image: im2!)!)
+//        let gr3 = rgb2gray(inputImage: CIImage(image: im3!)!)
+//        let gr4 = rgb2gray(inputImage: CIImage(image: im4!)!)
+//
         let context = CIContext()
-        let kps = detectSIFT(inputImage: image!, sigma: 1.0, r: 10.0, numberOctave: 5)
-        let kp  = convertCIImagetoCGImage(image: kps[0], context: context)
-        saveAsPNG(image: kps[0], context: context)
-        let locations = getKeypointLocationsFromImage(fromImage: kp)
-        let locImg = drawLocationImage(locations: locations)
-        print("------------------------")
-        print(locations)
-        let res = getKeypointLocationsFromImage(fromImage: convertCIImagetoCGImage(image: locImg, context: context))
-//        saveAsPNG(image: locImg, context: context)
-        
-//        detectSIFTtest(inputImage: image!, sigma: 0.5, k: sqrt(2), r: 10.0, numberExtrema: 10)
-// ------------------------------------------------------------------------------------------------
-        
-//        let k = 1.41421356237 // sqrt(2)
-//        
-//        // Stack of blurred images
-//        let blurredImage1 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma))
-//        let blurredImage2 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k))
-//        let blurredImage3 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k))
-//        let blurredImage4 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k))
-//        let blurredImage5 = rgb2gray(inputImage: gaussianBlur(inputImage: image!, sigma: sigma * k * k * k * k))
-////
-//        let output = eliminateUnstableKeypoints(map: extrema[1], src: blurredImage3, hiImg: blurredImage4, hiHiImg: blurredImage5, loImg: blurredImage2, loLoImg: blurredImage1)
-        
-//        imageView1.image = UIImage.init(ciImage: output)
-
-//        findPeakOrientation(inputKP: image!, inputMO: image!, inputSigma: 10)
-        
+//        let mn1 = findMagAndOri(image: gr1)
+//        let mn2 = findMagAndOri(image: gr2)
+//        let mn3 = findMagAndOri(image: gr3)
+//        let mn4 = findMagAndOri(image: gr4)
+//
+//        saveAsPNG(image: mn1, context: context)
+//        saveAsPNG(image: mn2, context: context)
+//        saveAsPNG(image: mn3, context: context)
+//        saveAsPNG(image: mn4, context: context)
+//
+//        let kp = CIImage(image: UIImage(named: "kp_100_13")!)
+//        let peak = findPeakOrientation(inputKP: kp!, inputMO: mn2, inputSigma: 2.0)
+//        let pr = getKeypointLocationsFromImage(fromImage: convertCIImagetoCGImage(image: peak, context: context))
+//        print(pr)
+//        let cp = getRGBAs(fromImage: convertCIImagetoCGImage(image: mn2, context: context), x: 8, y: 12, count: 13)
+//        print(cp)
 //        let test = testKernel(image: image!)
+//        let cp = getRGBAs(fromImage: convertCIImagetoCGImage(image: test, context: context), x: 0, y: 0, count: 50)
+//        print(cp)
+        
+        // -----------------
+        let gray = rgb2gray(inputImage: image!)
+
+        let trick = CIImage(image: UIImage(named: "pixels100")!)
+        let kp = detectSIFT(inputImage: trick!, sigma: 1.0, r: 10.0, numberOctave: 1)
+        let pr = getKeypointLocationsFromImage(fromImage: convertCIImagetoCGImage(image: kp[1], context: context)) // 36 keypoints
+
+        let locImg = drawLocationImage(locations: pr)
+
+        print(pr)
+
+        let mn = findMagAndOri(image: gray)
+        saveAsPNG(image: mn, context: context)
+        let peak = findPeakOrientation(inputKP: kp[1], inputMO: mn, inputSigma: 1.0)
+        saveAsPNG(image: peak, context: context)
+//        let pr2 = getKeypointLocationsFromImage(fromImage: convertCIImagetoCGImage(image: peak, context: context))
+//        print(pr2.count)
+
+        let output = runSIFTDescriptor(inputKPLocations: locImg, inputPeak: peak, inputMagOri: mn, length: Double(pr.count), sigma: 1.0)
+        print(pr.count)
+        print(output.extent)
+
+//        saveAsPNG(image: output, context: context)
     }
     
     override func didReceiveMemoryWarning() {
